@@ -220,7 +220,7 @@ class HotelNearResource(Resource) :
     @jwt_required()
     def get(self) :
 
-        
+
         long = request.args.get('long')
         lat = request.args.get('lat')
 
@@ -236,6 +236,15 @@ class HotelNearResource(Resource) :
             cursor.execute(query)
 
             result_list=cursor.fetchall()
+
+            if result_list[0]['id'] is None :
+                return{'error' : '잘못된 호텔 아이디 입니다.'} , 400
+
+            i = 0
+            for row in result_list :
+                result_list[i]['longtitude'] = float(row['longtitude'])
+                result_list[i]['latitude'] = float(row['latitude'])
+                i = i + 1
 
             cursor.close()
             connection.close()
