@@ -155,52 +155,6 @@
         }
       }
     },
-    "EnterpriseLogAccessIamRole": {
-      "Type": "AWS::IAM::Role",
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Version": "2012-10-17",
-          "Statement": [
-            {
-              "Effect": "Allow",
-              "Principal": {
-                "AWS": "arn:aws:iam::802587217904:root"
-              },
-              "Action": "sts:AssumeRole",
-              "Condition": {
-                "StringEquals": {
-                  "sts:ExternalId": "ServerlessEnterprise-a1eff685-8237-479e-9ee8-0e649590c3c4"
-                }
-              }
-            }
-          ]
-        },
-        "Policies": [
-          {
-            "PolicyName": "LogFilterAccess",
-            "PolicyDocument": {
-              "Version": "2012-10-17",
-              "Statement": [
-                {
-                  "Effect": "Allow",
-                  "Action": [
-                    "logs:FilterLogEvents"
-                  ],
-                  "Resource": [
-                    {
-                      "Fn::GetAtt": [
-                        "ApiLogGroup",
-                        "Arn"
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          }
-        ]
-      }
-    },
     "ApiLambdaFunction": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
@@ -208,9 +162,9 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/aws-pethotel-flask-api/dev/1678236760856-2023-03-08T00:52:40.856Z/aws-pethotel-flask-api.zip"
+          "S3Key": "serverless/aws-pethotel-flask-api/dev/1678240885350-2023-03-08T02:01:25.350Z/aws-pethotel-flask-api.zip"
         },
-        "Handler": "s_api.handler",
+        "Handler": "wsgi_handler.handler",
         "Runtime": "python3.9",
         "FunctionName": "aws-pethotel-flask-api-dev-api",
         "MemorySize": 1024,
@@ -226,14 +180,14 @@
         "ApiLogGroup"
       ]
     },
-    "ApiLambdaVersionaFuk73NTCxi84HkeLXyR59YfUDhNnfiAty7uRROQ": {
+    "ApiLambdaVersionuYw14AjwNIoQs7BHjwFxutAvXx4XL1T0khzv3aityh0": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "ApiLambdaFunction"
         },
-        "CodeSha256": "HK7B/C55K/4nLZnMevzTFAF4T5YoIR5qGy5qJCyArFA="
+        "CodeSha256": "bZIp1K884LYjx/XPcpFlVWqu2tf82Z64LCpRWn6b58g="
       }
     },
     "HttpApi": {
@@ -241,12 +195,6 @@
       "Properties": {
         "Name": "dev-aws-pethotel-flask-api",
         "ProtocolType": "HTTP"
-      }
-    },
-    "HttpApiLogGroup": {
-      "Type": "AWS::Logs::LogGroup",
-      "Properties": {
-        "LogGroupName": "/aws/http-api/aws-pethotel-flask-api-dev"
       }
     },
     "HttpApiStage": {
@@ -259,18 +207,8 @@
         "AutoDeploy": true,
         "DefaultRouteSettings": {
           "DetailedMetricsEnabled": false
-        },
-        "AccessLogSettings": {
-          "DestinationArn": {
-            "Fn::GetAtt": [
-              "HttpApiLogGroup",
-              "Arn"
-            ]
-          },
-          "Format": "{\"requestTime\":\"$context.requestTime\",\"requestId\":\"$context.requestId\",\"apiId\":\"$context.apiId\",\"resourcePath\":\"$context.routeKey\",\"path\":\"$context.path\",\"httpMethod\":\"$context.httpMethod\",\"stage\":\"$context.stage\",\"status\":\"$context.status\",\"integrationStatus\":\"$context.integrationStatus\",\"integrationLatency\":\"$context.integrationLatency\",\"responseLatency\":\"$context.responseLatency\",\"responseLength\":\"$context.responseLength\",\"errorMessage\":\"$context.error.message\",\"format\":\"SLS_HTTP_API_LOG\",\"version\":\"1.0.0\"}"
         }
-      },
-      "DependsOn": "HttpApiLogGroup"
+      }
     },
     "ApiLambdaPermissionHttpApi": {
       "Type": "AWS::Lambda::Permission",
@@ -346,26 +284,6 @@
         }
       },
       "DependsOn": "HttpApiIntegrationApi"
-    },
-    "CWLSubFilterApiLogGroupUsEast1": {
-      "Type": "AWS::Logs::SubscriptionFilter",
-      "Properties": {
-        "DestinationArn": "arn:aws:logs:us-east-1:802587217904:destination:a1eff685-8237-479e-9ee8-0e649590c3c4#ZFzpSBZ1gvfrSnHWHQ#aws-pethotel-flask-api#dev",
-        "FilterPattern": "?\"REPORT RequestId: \" ?\"SERVERLESS_ENTERPRISE\"",
-        "LogGroupName": {
-          "Ref": "ApiLogGroup"
-        }
-      }
-    },
-    "CWLSubFilterHttpApiLogGroupUsEast1": {
-      "Type": "AWS::Logs::SubscriptionFilter",
-      "Properties": {
-        "DestinationArn": "arn:aws:logs:us-east-1:802587217904:destination:a1eff685-8237-479e-9ee8-0e649590c3c4#ZFzpSBZ1gvfrSnHWHQ#aws-pethotel-flask-api#dev",
-        "FilterPattern": "\"SLS_HTTP_API_LOG\"",
-        "LogGroupName": {
-          "Ref": "HttpApiLogGroup"
-        }
-      }
     }
   },
   "Outputs": {
@@ -377,21 +295,10 @@
         "Name": "sls-aws-pethotel-flask-api-dev-ServerlessDeploymentBucketName"
       }
     },
-    "EnterpriseLogAccessIamRole": {
-      "Value": {
-        "Fn::GetAtt": [
-          "EnterpriseLogAccessIamRole",
-          "Arn"
-        ]
-      },
-      "Export": {
-        "Name": "sls-aws-pethotel-flask-api-dev-EnterpriseLogAccessIamRole"
-      }
-    },
     "ApiLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "ApiLambdaVersionaFuk73NTCxi84HkeLXyR59YfUDhNnfiAty7uRROQ"
+        "Ref": "ApiLambdaVersionuYw14AjwNIoQs7BHjwFxutAvXx4XL1T0khzv3aityh0"
       },
       "Export": {
         "Name": "sls-aws-pethotel-flask-api-dev-ApiLambdaFunctionQualifiedArn"
