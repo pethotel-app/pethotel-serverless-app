@@ -174,7 +174,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/aws-pethotel-flask-api/dev/1678243382356-2023-03-08T02:43:02.356Z/aws-pethotel-flask-api.zip"
+                "S3Key": "serverless/aws-pethotel-flask-api/dev/1678245137768-2023-03-08T03:12:17.768Z/aws-pethotel-flask-api.zip"
               },
               "Handler": "wsgi_handler.handler",
               "Runtime": "python3.9",
@@ -192,14 +192,14 @@
               "ApiLogGroup"
             ]
           },
-          "ApiLambdaVersion4C9Jm5yeRnw3tCsSSTPwqTdO52CBCaWQ1345ofcH8": {
+          "ApiLambdaVersionDUCJBjNiQEPI5otX0dpcSwmoKvxeEoQj6bqXBxgWLV8": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "ApiLambdaFunction"
               },
-              "CodeSha256": "iIKxk20h/B409R+k8K9CRfGVDVR1oUuacIYVX6/obp0="
+              "CodeSha256": "q2MOLtcGAMmFdVmVoT4N/5SOeNBGpN74XjkMWiQBhIU="
             }
           },
           "HttpApi": {
@@ -307,7 +307,7 @@
           "ApiLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "ApiLambdaVersion4C9Jm5yeRnw3tCsSSTPwqTdO52CBCaWQ1345ofcH8"
+              "Ref": "ApiLambdaVersionDUCJBjNiQEPI5otX0dpcSwmoKvxeEoQj6bqXBxgWLV8"
             },
             "Export": {
               "Name": "sls-aws-pethotel-flask-api-dev-ApiLambdaFunctionQualifiedArn"
@@ -458,7 +458,7 @@
         "timeout": 6,
         "runtime": "python3.9",
         "vpc": {},
-        "versionLogicalId": "ApiLambdaVersion4C9Jm5yeRnw3tCsSSTPwqTdO52CBCaWQ1345ofcH8"
+        "versionLogicalId": "ApiLambdaVersionDUCJBjNiQEPI5otX0dpcSwmoKvxeEoQj6bqXBxgWLV8"
       }
     },
     "configValidationMode": "warn",
@@ -484,7 +484,7 @@
     "artifact": "C:\\Users\\-\\Documents\\github\\pethotel-serverless-app\\.serverless\\aws-pethotel-flask-api.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/aws-pethotel-flask-api/dev/1678243382356-2023-03-08T02:43:02.356Z",
+    "artifactDirectoryName": "serverless/aws-pethotel-flask-api/dev/1678245137768-2023-03-08T03:12:17.768Z",
     "artifact": "aws-pethotel-flask-api.zip"
   }
 }

@@ -91,6 +91,55 @@ class PointAddResource(Resource) :
 
         return {"result" : "success"} , 200
     
+# 유저 최종 포인트 적립
+class TotalPointResource(Resource) :  
+    @jwt_required()
+    def get(self) :
+
+        userId = get_jwt_identity()
+
+        try :
+
+            connection = get_connection()
+
+            query = '''select userId, totalPoint , p.createdAt from points p
+                    join user u
+                    on p.userId = u.id
+                    where u.id = %s
+                    order by p.id desc limit 1;'''
+            
+            record = (userId,)
+
+            cursor = connection.cursor(dictionary=True)
+
+
+            cursor.execute(query,record)
+
+            resultList = cursor.fetchall()
+
+            i = 0
+            for row in resultList :
+                resultList[i]['createdAt'] = row['createdAt'].isoformat()
+                i = i + 1
+
+
+            cursor.close()
+            connection.close()
+
+        except Error as e :
+
+
+            cursor.close()
+            connection.close()
+
+            return{'error' : str(e)}, 500
+
+        if len(resultList) == 0 :
+
+            return {'error' : '잘못된 유저 아이디입니다.'}, 400
+
+        return{'result' : 'success', 'items' : resultList}    
+    
 
 
 
