@@ -162,7 +162,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/aws-pethotel-flask-api/dev/1678240885350-2023-03-08T02:01:25.350Z/aws-pethotel-flask-api.zip"
+          "S3Key": "serverless/aws-pethotel-flask-api/dev/1678243382356-2023-03-08T02:43:02.356Z/aws-pethotel-flask-api.zip"
         },
         "Handler": "wsgi_handler.handler",
         "Runtime": "python3.9",
@@ -180,14 +180,14 @@
         "ApiLogGroup"
       ]
     },
-    "ApiLambdaVersionuYw14AjwNIoQs7BHjwFxutAvXx4XL1T0khzv3aityh0": {
+    "ApiLambdaVersion4C9Jm5yeRnw3tCsSSTPwqTdO52CBCaWQ1345ofcH8": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "ApiLambdaFunction"
         },
-        "CodeSha256": "bZIp1K884LYjx/XPcpFlVWqu2tf82Z64LCpRWn6b58g="
+        "CodeSha256": "iIKxk20h/B409R+k8K9CRfGVDVR1oUuacIYVX6/obp0="
       }
     },
     "HttpApi": {
@@ -298,7 +298,7 @@
     "ApiLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "ApiLambdaVersionuYw14AjwNIoQs7BHjwFxutAvXx4XL1T0khzv3aityh0"
+        "Ref": "ApiLambdaVersion4C9Jm5yeRnw3tCsSSTPwqTdO52CBCaWQ1345ofcH8"
       },
       "Export": {
         "Name": "sls-aws-pethotel-flask-api-dev-ApiLambdaFunctionQualifiedArn"

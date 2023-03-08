@@ -2,13 +2,13 @@ from flask import Flask
 from flask_jwt_extended import JWTManager
 from flask_restful import Api
 from config import Config
-from resource.benefit import CouponSearchResource, CouponUseResource, PointAddResource, PointSearchResource
-from resource.favorite import FavoriteListResource, FavoriteResource
-from resource.hotel import HotelInfoResource, HotelPriceResource, HotelSearchRankResource, HotelSearchResource
-from resource.pet import  PetListResource, PetResource
-from resource.reservation import ReservationResource
-from resource.review import MyReviewCheckResource, ReviewListResource
-from resource.user import UserChangePasswordResource, UserIdSearchResource, UserImageResource, UserInfoResource, UserLoginResource, UserLogoutResource, UserPasswordSearchResource, UserRegisterResource, jwt_blacklist
+from resources.benefit import CouponSearchResource, CouponUseResource, PointAddResource, PointSearchResource
+from resources.favorite import FavoriteListResource, FavoriteResource
+from resources.hotel import HotelInfoResource, HotelPriceResource, HotelSearchRankResource, HotelSearchResource
+from resources.pet import  PetListResource, PetResource
+from resources.reservation import ReservationResource
+from resources.review import MyReviewCheckResource, ReviewListResource
+from resources.user import UserChangePasswordResource, UserIdSearchResource, UserImageResource, UserInfoResource, UserLoginResource, UserLogoutResource, UserPasswordSearchResource, UserRegisterResource, jwt_blacklist
 
 app = Flask(__name__)
 
