@@ -140,7 +140,7 @@ class TotalPointResource(Resource) :
         
         totalPoint = resultList[0]['totalPoint']
 
-        return{'result' : 'success', 'totaPoint' : totalPoint}    
+        return{'result' : 'success', 'totalPoint' : totalPoint}    
     
 
 
