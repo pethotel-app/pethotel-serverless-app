@@ -11,7 +11,7 @@ class ReservationResource(Resource) :
     # 18번째 화면 기획서
     @jwt_required()
     def get(self) :
-        user_id=get_jwt_identity()s
+        user_id=get_jwt_identity()
 
         # 2. db에 저장된 데이터를 가져온다.
         try :
