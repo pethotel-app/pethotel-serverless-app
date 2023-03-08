@@ -156,7 +156,7 @@ class CouponSearchResource(Resource) :
         try : 
             connection = get_connection()
             
-            query = '''select userId,couponId,title,description,dateOfUseStart,dateOfUseEnd from coupons c
+            query = '''select userId,couponId,title,description,discount,dateOfUseStart,dateOfUseEnd from coupons c
                     join checkCoupon k
                     on c.id = k.couponId
                     where userId = %s;'''
