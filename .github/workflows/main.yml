@@ -1,21 +1,22 @@
-name: pethotel deploy   ### ec2를 배포한다는 의미
-on:      ### 언제?
-  push:  ### 푸시가 되었을 때
-    branches: 
-      - main  
+name: serverless deploy2
 
-jobs: ### 무엇을 시킬것인가.
-  SSH:
-    runs-on: ubuntu-latest  ### ubuntu라는 컴퓨터의 최신버전을 준비해줘라
-  
-    steps: 
-      - uses: actions/checkout@v3 
-      - name: ssh to ec2
-        uses: appleboy/ssh-action@master 
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install SLS and Deploy
+        uses: serverless/github-action@v3
         with:
-          key: ${{ secrets.PRIVATE_KEY }}  ### sceret 이름을 ${{}} 안에 넣어준다.
-          host: ${{ secrets.HOST }}            ### sceret 이름을 ${{}} 안에 넣어준다.
-          username: ${{ secrets.USER }}        ### sceret 이름을 ${{}} 안에 넣어준다.
-          script: |
-            cd pethotel-serverless-app         ### streamlit_car_price_app 으로 이동
-            git pull                           ### git을 pull 하라
+          args: -c "sls plugin install -n serverless-wsgi && sls plugin install -n serverless-python-requirements && sls deploy"
+          entrypoint: /bin/sh
+        env:
+          AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY_ID}}
+          AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
