@@ -137,8 +137,10 @@ class TotalPointResource(Resource) :
         if len(resultList) == 0 :
 
             return {'error' : '잘못된 유저 아이디입니다.'}, 400
+        
+        totalPoint = resultList[0]['totalPoint']
 
-        return{'result' : 'success', 'items' : resultList}    
+        return{'result' : 'success', 'totalPoint' : totalPoint}    
     
 
 
