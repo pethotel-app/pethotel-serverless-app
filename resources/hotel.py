@@ -212,3 +212,39 @@ class HotelPriceResource(Resource) :
             return {'error' : '잘못된 호텔 아이디입니다.'}, 400
 
         return{'result' : 'success', 'items' : resultList}
+
+
+# 내 위치 주변 호텔
+class HotelNearResource(Resource) :
+
+    @jwt_required()
+    def get(self) :
+
+        
+        long = request.args.get('long')
+        lat = request.args.get('lat')
+
+        try :
+            connection = get_connection()
+
+            query = '''SELECT *
+                    FROM hotel
+                    ORDER BY ((latitude - '''+lat+''') * (latitude - '''+lat+''') + (longtitude - '''+long+''') * (longtitude - '''+long+''')) ;'''
+            
+            cursor = connection.cursor(dictionary=True)
+
+            cursor.execute(query)
+
+            result_list=cursor.fetchall()
+
+            cursor.close()
+            connection.close()
+
+        except Error as e :
+            print(e)
+            cursor.close()
+            connection.close()
+            return{"result":"fail","error":str(e)}, 500
+        
+        return {"result" : 'success','items':result_list,'count':len(result_list)}, 200
+
