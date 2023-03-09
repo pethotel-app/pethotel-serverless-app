@@ -230,7 +230,7 @@ class HotelNearResource(Resource) :
         try :
             connection = get_connection()
 
-            query = '''select h.id, h.title, h.addr, h.imgUrl, ifnull(avg(r.rating),0) as avg, ifnull(count(r.hotelId),0) as cnt,
+            query = '''select h.id, h.title, h.addr,if(h.description is null,"설명 등록 대기중입니다.",h.description) as description,h.imgUrl, ifnull(avg(r.rating),0) as avg, ifnull(count(r.hotelId),0) as cnt,
                     if(f.userId is null, 0, 1) as 'favorite'
                     from yh_project_db.hotel h
                     left join yh_project_db.follows f on f.hotelId = h.id and f.userId= %s
