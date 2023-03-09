@@ -225,28 +225,36 @@ class HotelNearResource(Resource) :
         lat = request.args.get('lat')
         limit = request.args.get('limit')
         offset = request.args.get('offset')
+        user_id = get_jwt_identity()
 
         try :
             connection = get_connection()
 
-            query = '''SELECT *
-                    FROM hotel
-                    ORDER BY ((latitude - '''+lat+''') * (latitude - '''+lat+''') + (longtitude - '''+long+''') * (longtitude - '''+long+''')) ASC
-                    limit '''+offset+''','''+limit+'''; '''
+            query = '''select h.id, h.title, h.addr, h.imgUrl, ifnull(avg(r.rating),0) as avg, ifnull(count(r.hotelId),0) as cnt,
+                    if(f.userId is null, 0, 1) as 'favorite'
+                    from yh_project_db.hotel h
+                    left join yh_project_db.follows f on f.hotelId = h.id and f.userId= %s
+                    left join yh_project_db.reviews r on r.hotelId = h.id
+                    group by h.id
+	                ORDER BY ((h.latitude - '''+lat+''') * (h.latitude - '''+lat+''') + (h.longtitude - '''+long+''') * (h.longtitude - '''+long+''')) ASC
+                    limit ''' + offset + ''' , ''' + limit + ''' ; '''
+            
+            record = (user_id, )
             
             cursor = connection.cursor(dictionary=True)
 
-            cursor.execute(query)
+            cursor.execute(query,record)
 
             result_list=cursor.fetchall()
+
+            print(result_list)
 
             if result_list[0]['id'] is None :
                 return{'error' : '잘못된 호텔 아이디 입니다.'} , 400
 
             i = 0
             for row in result_list :
-                result_list[i]['longtitude'] = float(row['longtitude'])
-                result_list[i]['latitude'] = float(row['latitude'])
+                result_list[i]['avg'] = float(row['avg'])
                 i = i + 1
 
             cursor.close()
