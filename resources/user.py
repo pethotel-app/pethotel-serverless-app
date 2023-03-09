@@ -25,10 +25,7 @@ class UserRegisterResource(Resource) :
         except EmailNotValidError as e :
             print(str(e))
             return {'error' : str(e)}, 400
-
-        if len(data["password"]) < 4 or len(data["password"]) > 20 :
-            return {'error' : '비밀번호 길이 확인'}, 400
-
+        
         hashed_password = hash_password(data["password"])
 
         try :
