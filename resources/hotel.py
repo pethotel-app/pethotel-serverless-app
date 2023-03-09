@@ -223,13 +223,16 @@ class HotelNearResource(Resource) :
 
         long = request.args.get('long')
         lat = request.args.get('lat')
+        limit = request.args.get('limit')
+        offset = request.args.get('offset')
 
         try :
             connection = get_connection()
 
             query = '''SELECT *
                     FROM hotel
-                    ORDER BY ((latitude - '''+lat+''') * (latitude - '''+lat+''') + (longtitude - '''+long+''') * (longtitude - '''+long+''')) ;'''
+                    ORDER BY ((latitude - '''+lat+''') * (latitude - '''+lat+''') + (longtitude - '''+long+''') * (longtitude - '''+long+''')) ASC
+                    limit '''+offset+''','''+limit+'''; '''
             
             cursor = connection.cursor(dictionary=True)
 
