@@ -123,7 +123,7 @@ class UserLogoutResource(Resource) :
 
 # 아이디찾기
 class UserIdSearchResource(Resource) :
-    def get(self) :
+    def post(self) :
         # { "name": "김이름,
         # "phone": "010-1234-5678"}
 
@@ -163,7 +163,7 @@ class UserIdSearchResource(Resource) :
 
 # 비밀번호찾기
 class UserPasswordSearchResource(Resource) :
-    def get(self) :
+    def post(self) :
         # { "phone": "010-1234-5678",
         # "email": "abcd@naver.com"}
 
@@ -522,7 +522,7 @@ class UserImageResource(Resource) :
     
 # 이메일 중복 체크 확인
 class CheckUserEmail(Resource) :
-    def get(self) :
+    def post(self) :
         # { "email": "aaa@naver.com" }
 
         data = request.get_json()
@@ -559,7 +559,7 @@ class CheckUserEmail(Resource) :
 
 # 핸드폰 중복 체크 확인
 class CheckUserPhone(Resource) :
-    def get(self) :
+    def post(self) :
         # { "phone": "010-1222-5678" }
 
         data = request.get_json()
