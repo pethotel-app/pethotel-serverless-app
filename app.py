@@ -8,7 +8,7 @@ from resources.hotel import HotelInfoResource, HotelNearResource, HotelPriceReso
 from resources.pet import  PetListResource, PetResource
 from resources.reservation import ReservationResource
 from resources.review import MyReviewCheckResource, ReviewListResource
-from resources.user import UserChangePasswordResource, UserIdSearchResource, UserImageResource, UserInfoResource, UserLoginResource, UserLogoutResource, UserPasswordSearchResource, UserRegisterResource, jwt_blacklist
+from resources.user import CheckUserEmail, CheckUserPhone, UserChangePasswordResource, UserIdSearchResource, UserImageResource, UserInfoResource, UserLoginResource, UserLogoutResource, UserPasswordSearchResource, UserRegisterResource, jwt_blacklist
 
 app = Flask(__name__)
 
@@ -32,6 +32,9 @@ api.add_resource(UserImageResource, '/user/profile')
 api.add_resource(UserIdSearchResource, '/user/id/search')
 api.add_resource(UserPasswordSearchResource, '/user/password/search')
 api.add_resource(UserChangePasswordResource, '/user/change/password')
+
+api.add_resource(CheckUserEmail, '/user/email')
+api.add_resource(CheckUserPhone, '/user/phone')
 
 api.add_resource(PointSearchResource, '/benefit/point')
 api.add_resource(PointAddResource, '/benefit/addPoint')

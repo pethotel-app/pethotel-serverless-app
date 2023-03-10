@@ -427,7 +427,6 @@ class UserInfoResource(Resource) :
 
 # 회원정보 이미지
 class UserImageResource(Resource) :
-
     # 이미지 등록
     @jwt_required()
     def put(self) :
@@ -520,3 +519,78 @@ class UserImageResource(Resource) :
             return {"result" : "fail", "error" : str(e)}, 500
 
         return {"result" : "success"}, 200
+    
+# 이메일 중복 체크 확인
+class CheckUserEmail(Resource) :
+    def get(self) :
+        # { "email": "aaa@naver.com" }
+
+        data = request.get_json()
+
+        try :
+            connection = get_connection()
+
+            query = '''select email
+                    from yh_project_db.user
+                    where email = %s;'''
+
+            record = (data["email"], )
+
+            cursor = connection.cursor(dictionary=True)
+
+            cursor.execute(query, record)
+
+            result_list = cursor.fetchall()
+
+            if len(result_list) == 0 :
+                return {"result" : "success", "check" : "true"}, 200
+
+            cursor.close()
+            connection.close()
+
+        except Error as e :
+            print(e)
+            cursor.close()
+            connection.close()
+
+            return {"result" : "fail", "error" : str(e)}, 500
+
+        return {"result" : "success", "check" : "false"}, 200
+
+# 핸드폰 중복 체크 확인
+class CheckUserPhone(Resource) :
+    def get(self) :
+        # { "phone": "010-1222-5678" }
+
+        data = request.get_json()
+
+        try :
+            connection = get_connection()
+
+            query = '''select phone
+                    from yh_project_db.user
+                    where phone = %s;'''
+
+            record = (data["phone"], )
+
+            cursor = connection.cursor(dictionary=True)
+
+            cursor.execute(query, record)
+
+            result_list = cursor.fetchall()
+
+            if len(result_list) == 0 :
+                return {"result" : "success", "check" : "true"}, 200
+
+            cursor.close()
+            connection.close()
+
+        except Error as e :
+            print(e)
+            cursor.close()
+            connection.close()
+
+            return {"result" : "fail", "error" : str(e)}, 500
+
+        return {"result" : "success", "check" : "false"}, 200
+
