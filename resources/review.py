@@ -98,6 +98,7 @@ class ReviewListResource(Resource) :
 
 
         # DB에 저장
+        
 
         try :
             connection = get_connection()
