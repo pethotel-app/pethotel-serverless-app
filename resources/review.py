@@ -2,6 +2,7 @@ from datetime import datetime
 from flask import request
 from flask_jwt_extended import create_access_token, get_jwt, get_jwt_identity, jwt_required
 from flask_restful import Resource
+import requests
 from config import Config
 from mysql_connection import get_connection
 from mysql.connector import Error
@@ -9,6 +10,7 @@ from email_validator import validate_email, EmailNotValidError
 from utils import check_password, hash_password
 from datetime import datetime
 import boto3
+import json
 
 class ReviewListResource(Resource) :
 
@@ -55,14 +57,52 @@ class ReviewListResource(Resource) :
         # 저장된 사진의 imgUrl 생성
         imgUrl = Config.S3_LOCATION+new_file_name
 
+        # 문서 요약 API ( 리뷰 요약 )
+
+
+        headers = {
+
+            "X-NCP-APIGW-API-KEY-ID": Config.client_id,
+            "X-NCP-APIGW-API-KEY": Config.client_secret,
+            "Content-Type": "application/json"
+        }
+        language = "ko"
+
+        
+
+        url= "https://naveropenapi.apigw.ntruss.com/text-summary/v1/summarize" 
+
+        summmaryData = {"document":{
+            "content":content},
+            "option":{
+            "language":language
+            }
+        }
+
+        print(json.dumps(summmaryData, indent=4, sort_keys=True))
+
+        response = requests.post(url, data=json.dumps(summmaryData), headers=headers)
+
+        # rescode = response.status_code
+        # print(response)
+        # print(rescode)
+
+        json_data = json.loads(response.text)
+        summary = json_data['summary']
+        print(summary)
+
+
+        
+
+
         # DB에 저장
 
         try :
             connection = get_connection()
             query='''insert into reviews
-                    (hotelId,userId,content,rating,imgUrl)
-                    values(%s,%s,%s,%s,%s);'''
-            record = (hotelId,user_id,content,rating,imgUrl)
+                    (hotelId,userId,content,rating,imgUrl,contentSummary)
+                    values(%s,%s,%s,%s,%s,%s);'''
+            record = (hotelId,user_id,content,rating,imgUrl,summary)
             cursor = connection.cursor()
             cursor.execute(query,record)
             connection.commit()
@@ -257,3 +297,4 @@ class MyReviewCheckResource(Resource):
             return{"result":"fail","error":str(e)}, 500
         
         return {"result" : 'seccess','items':resultList,'count':len(resultList)}, 200
+

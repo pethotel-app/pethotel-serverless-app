@@ -20,3 +20,8 @@ class Config :
     S3_BUCKET = 'yunwltn-yh-test'
     # S3 Location
     S3_LOCATION = 'https://yunwltn-yh-test.s3.ap-northeast-2.amazonaws.com/'
+
+    # 네이버 클로바 관련 키
+    
+    client_id = "zith3b2nca"
+    client_secret = "VsAR4YSxUn3wBiP778UWV0eLUsxDBMw0f1ZSZty7"
