@@ -2,7 +2,7 @@ from datetime import datetime
 from flask import request
 from flask_jwt_extended import create_access_token, get_jwt, get_jwt_identity, jwt_required
 from flask_restful import Resource
-import requests
+# import requests
 from config import Config
 from mysql_connection import get_connection
 from mysql.connector import Error
@@ -10,115 +10,115 @@ from email_validator import validate_email, EmailNotValidError
 from utils import check_password, hash_password
 from datetime import datetime
 import boto3
-import json
+# import json
 
 # todo : 주석처리 (라이브러리 추가 후에)
 
 class ReviewListResource(Resource) :
 
-    # 리뷰 생성 API
-    @jwt_required()
-    def post(self, hotelId) :
+    # # 리뷰 생성 API
+    # @jwt_required()
+    # def post(self, hotelId) :
 
-        # photo : file
-        # content : text
-        # rating : text
+    #     # photo : file
+    #     # content : text
+    #     # rating : text
 
-        user_id=get_jwt_identity()
+    #     user_id=get_jwt_identity()
 
-        if 'photo' not in request.files or 'content' not in request.form :
-            return {'error':'데이터를 정확히 보내세요.'},400
+    #     if 'photo' not in request.files or 'content' not in request.form :
+    #         return {'error':'데이터를 정확히 보내세요.'},400
         
-        file=request.files['photo']
-        content=request.form['content']
-        rating = request.form['rating']
-        # 레이팅 형변환
-        rating=int(rating)
+    #     file=request.files['photo']
+    #     content=request.form['content']
+    #     rating = request.form['rating']
+    #     # 레이팅 형변환
+    #     rating=int(rating)
 
-        if 'image' not in file.content_type :
-            return {'error':'이미지 파일만 올려주세요'},400
+    #     if 'image' not in file.content_type :
+    #         return {'error':'이미지 파일만 올려주세요'},400
         
-        # 파일명을 유니크하게 만드는 방법
-        current_time=datetime.now()
-        new_file_name=current_time.isoformat().replace(':','_') + file.content_type.split('/')[-1]
+    #     # 파일명을 유니크하게 만드는 방법
+    #     current_time=datetime.now()
+    #     new_file_name=current_time.isoformat().replace(':','_') + file.content_type.split('/')[-1]
 
-        file.filename = new_file_name
+    #     file.filename = new_file_name
 
-        # S3에 파일을 업로드
-        client=boto3.client('s3',
-                    aws_access_key_id = Config.ACCESS_KEY ,
-                    aws_secret_access_key = Config.SECRET_ACCESS)
+    #     # S3에 파일을 업로드
+    #     client=boto3.client('s3',
+    #                 aws_access_key_id = Config.ACCESS_KEY ,
+    #                 aws_secret_access_key = Config.SECRET_ACCESS)
         
-        try :
-            client.upload_fileobj(file,Config.S3_BUCKET,new_file_name,
-                                    ExtraArgs ={'ACL':'public-read','ContentType':file.content_type})
+    #     try :
+    #         client.upload_fileobj(file,Config.S3_BUCKET,new_file_name,
+    #                                 ExtraArgs ={'ACL':'public-read','ContentType':file.content_type})
             
-        except Exception as e :
-            return {'error':str(e)}, 500
+    #     except Exception as e :
+    #         return {'error':str(e)}, 500
         
-        # 저장된 사진의 imgUrl 생성
-        imgUrl = Config.S3_LOCATION+new_file_name
+    #     # 저장된 사진의 imgUrl 생성
+    #     imgUrl = Config.S3_LOCATION+new_file_name
 
-        # 문서 요약 API ( 리뷰 요약 )
+    #     # 문서 요약 API ( 리뷰 요약 )
 
 
-        headers = {
+    #     headers = {
 
-            "X-NCP-APIGW-API-KEY-ID": Config.client_id,
-            "X-NCP-APIGW-API-KEY": Config.client_secret,
-            "Content-Type": "application/json"
-        }
-        language = "ko"
-
-        
-
-        url= "https://naveropenapi.apigw.ntruss.com/text-summary/v1/summarize" 
-
-        summmaryData = {"document":{
-            "content":content},
-            "option":{
-            "language":language
-            }
-        }
-
-        print(json.dumps(summmaryData, indent=4, sort_keys=True))
-
-        response = requests.post(url, data=json.dumps(summmaryData), headers=headers)
-
-        # rescode = response.status_code
-        # print(response)
-        # print(rescode)
-
-        json_data = json.loads(response.text)
-        summary = json_data['summary']
-        print(summary)
-
+    #         "X-NCP-APIGW-API-KEY-ID": Config.client_id,
+    #         "X-NCP-APIGW-API-KEY": Config.client_secret,
+    #         "Content-Type": "application/json"
+    #     }
+    #     language = "ko"
 
         
 
+    #     url= "https://naveropenapi.apigw.ntruss.com/text-summary/v1/summarize" 
 
-        # DB에 저장
+    #     summmaryData = {"document":{
+    #         "content":content},
+    #         "option":{
+    #         "language":language
+    #         }
+    #     }
+
+    #     print(json.dumps(summmaryData, indent=4, sort_keys=True))
+
+    #     response = requests.post(url, data=json.dumps(summmaryData), headers=headers)
+
+    #     # rescode = response.status_code
+    #     # print(response)
+    #     # print(rescode)
+
+    #     json_data = json.loads(response.text)
+    #     summary = json_data['summary']
+    #     print(summary)
+
+
         
 
-        try :
-            connection = get_connection()
-            query='''insert into reviews
-                    (hotelId,userId,content,rating,imgUrl,contentSummary)
-                    values(%s,%s,%s,%s,%s,%s);'''
-            record = (hotelId,user_id,content,rating,imgUrl,summary)
-            cursor = connection.cursor()
-            cursor.execute(query,record)
-            connection.commit()
-            cursor.close()
-            connection.close()
 
-        except Error as e :
-            print(e)
-            cursor.close()
-            connection.close()
-            return{'error':str(e)},500
+    #     # DB에 저장
+
+
+    #     try :
+    #         connection = get_connection()
+    #         query='''insert into reviews
+    #                 (hotelId,userId,content,rating,imgUrl,contentSummary)
+    #                 values(%s,%s,%s,%s,%s,%s);'''
+    #         record = (hotelId,user_id,content,rating,imgUrl,summary)
+    #         cursor = connection.cursor()
+    #         cursor.execute(query,record)
+    #         connection.commit()
+    #         cursor.close()
+    #         connection.close()
+
+    #     except Error as e :
+    #         print(e)
+    #         cursor.close()
+    #         connection.close()
+    #         return{'error':str(e)},500
         
-        return {'result':'success'},200
+    #     return {'result':'success'},200
 
     # 특정 호텔에 대한 리뷰 가져오는 API
     # 유저의 name과 user의 프로필 사진 + 리뷰 테이블의 데이터
