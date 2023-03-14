@@ -11,4 +11,3 @@ flask-jwt-extended
 email-validator
 
 requests
-json
