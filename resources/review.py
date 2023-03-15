@@ -124,7 +124,10 @@ class ReviewListResource(Resource) :
     # 유저의 name과 user의 프로필 사진 + 리뷰 테이블의 데이터
     @jwt_required()
     def get(self, hotelId) :
-
+        
+        offset = request.args.get('offset')
+        limit = request.args.get('limit')
+        
         try :
             connection = get_connection()
 
@@ -132,7 +135,9 @@ class ReviewListResource(Resource) :
                     from reviews r
                     left join user u
                     on u.id = r.userId
-                    where r.hotelId = %s;'''
+                    where r.hotelId = %s
+                    order by updatedAt desc
+                    limit ''' + offset + ''' , ''' + limit + ''' ; '''
             record = (hotelId,)
 
             ## 중요!!!! select 문은 
@@ -161,6 +166,7 @@ class ReviewListResource(Resource) :
             return{"result":"fail","error":str(e)}, 500
         
         return {"result" : 'seccess','items':resultList,'count':len(resultList)}, 200
+
 
     # 리뷰 수정 API
     @jwt_required()
