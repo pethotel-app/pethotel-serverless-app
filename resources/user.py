@@ -604,7 +604,7 @@ class UserMyPageResource(Resource) :
         try :
             connection = get_connection()
 
-            query = '''SELECT u.name, IFNULL(p.totalPoint,0) as totalPoint, IFNULL(COUNT(c.userId),0) as cntCoupon
+            query = '''SELECT u.id,u.name,u.userImgUrl,IFNULL(p.totalPoint,0) as totalPoint, IFNULL(COUNT(c.userId),0) as cntCoupon
                     FROM user u
                     LEFT JOIN (
                     SELECT userId, totalPoint
