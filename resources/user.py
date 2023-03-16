@@ -604,30 +604,32 @@ class UserMyPageResource(Resource) :
         try :
             connection = get_connection()
 
-            query = '''SELECT u.id,u.name,u.userImgUrl,IFNULL(p.totalPoint,0) as totalPoint, IFNULL(COUNT(c.userId),0) as cntCoupon
+            query = '''SELECT u.id, u.name, u.userImgUrl, IFNULL(p.totalPoint, 0) as totalPoint, IFNULL(COUNT(c.userId), 0) as cntCoupon
                     FROM user u
                     LEFT JOIN (
                     SELECT userId, totalPoint
                     FROM points
-                    WHERE userId = %s
+                    WHERE userId = %s AND createdAt <= CURDATE()
                     ORDER BY createdAt DESC
                     LIMIT 1
                     ) p ON u.id = p.userId
                     LEFT JOIN checkCoupon c ON u.id = c.userId
-                    WHERE p.userId = %s
+                    WHERE u.id = %s
                     GROUP BY u.id;'''
 
             record = ( user_id,user_id )
+
+            print(user_id)
+
 
             cursor = connection.cursor(dictionary= True)
 
             cursor.execute(query, record)
 
+
             result_list = cursor.fetchall()
 
-            if len(result_list) == 0 :
-                return {"error" : "회원가입한 사람이 아닙니다"} , 400
-
+            print(result_list)
 
             cursor.close()
             connection.close()
