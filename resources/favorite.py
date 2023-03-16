@@ -82,7 +82,8 @@ class FavoriteListResource(Resource) :
         try :
             connection = get_connection()
 
-            query = '''select f.hotelId, h.title, h.imgUrl, ifnull(avg(r.rating),0) as avg, ifnull(count(r.hotelId),0) as cnt
+            query = '''select f.hotelId, h.title, h.imgUrl, ifnull(avg(r.rating),0) as avg, ifnull(count(r.hotelId),0) as cnt,
+                    if(f.userId is null, 0, 1) as 'favorite'    
                     from yh_project_db.follows f
                     left join yh_project_db.hotel h on f.hotelId = h.id
                     left join yh_project_db.reviews r on r.hotelId = h.id
