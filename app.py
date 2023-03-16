@@ -52,7 +52,7 @@ api.add_resource(FavoriteListResource, '/favorite')
 api.add_resource(HotelSearchResource, '/hotel/search')
 api.add_resource(HotelSearchRankResource, '/hotel/search/rank')
 
-api.add_resource(PetListResource, '/pets/')
+api.add_resource(PetListResource, '/pets')
 api.add_resource(PetResource, '/pets/<int:petId>')
 
 api.add_resource(ReviewListResource, '/review/<int:hotelId>')
