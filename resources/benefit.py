@@ -142,9 +142,67 @@ class TotalPointResource(Resource) :
 
         return{'result' : 'success', 'totalPoint' : totalPoint}    
     
+# 유저 쿠폰 추가
+class CouponResource(Resource) :
+    @jwt_required()
+    def put(self, couponId) :
+        userId = get_jwt_identity()
 
+        try : 
+            connection = get_connection()
 
+            query = '''insert into yh_project_db.checkCoupon(userId, couponId)
+                    values (%s, %s);'''
 
+            record = (userId, couponId)
+
+            cursor = connection.cursor()
+
+            cursor.execute(query,record)
+
+            connection.commit()
+
+            cursor.close()
+            connection.close()
+
+        except Error as e :
+            
+            print(e)
+            cursor.close()
+            connection.close()
+            
+            return {"error" : str(e)}, 500
+
+        return {"result" : "success"} , 200
+    
+    # 쿠폰 사용
+    @jwt_required()
+    def delete(self, couponId) :
+
+        userId = get_jwt_identity()
+
+        try : 
+            connection = get_connection()
+            
+            query = '''delete from checkCoupon
+                    where UserId= %s and couponId= %s;'''
+
+            record = (userId,couponId)
+
+            cursor = connection.cursor()
+            cursor.execute(query,record)
+            connection.commit()
+            cursor.close()
+            connection.close()
+
+        except Error as e:
+            print(e)
+            cursor.close()
+            connection.close()
+            return {'error':str(e)},500
+
+        return {'result':'success'},200
+    
 # 쿠폰조회
 class CouponSearchResource(Resource) :
     @jwt_required()
@@ -188,51 +246,5 @@ class CouponSearchResource(Resource) :
             return{'error' : str(e)}, 500
         
         
-        return{'result' : 'success' , 'couponList' : resultList, 'count' : len(resultList)}
-
-# 쿠폰 사용
-class CouponUseResource(Resource) :
-    @jwt_required()
-    def delete(self,couponId) :
-
-        userId = get_jwt_identity()
-
-        try : 
-            connection = get_connection()
-            
-            query = '''delete from checkCoupon
-                    where UserId= %s and couponId= %s;'''
-
-            record = (userId,couponId)
-
-            cursor = connection.cursor()
-            cursor.execute(query,record)
-            connection.commit()
-            cursor.close()
-            connection.close()
-
-        except Error as e:
-            print(e)
-            cursor.close()
-            connection.close()
-            return {'error':str(e)},500
-
-        return {'result':'success'},200
-    
-
-    
-
-
-
-
-
-
-            
-
-
-
-
-
-            
-
+        return{'result' : 'success' , 'couponList' : resultList, 'count' : len(resultList)}      
 
