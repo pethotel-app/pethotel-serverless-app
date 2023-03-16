@@ -255,6 +255,8 @@ class HotelNearResource(Resource) :
             i = 0
             for row in result_list :
                 result_list[i]['avg'] = float(row['avg'])
+                result_list[i]['longtitude'] = float(row['longtitude'])
+                result_list[i]['latitude'] = float(row['latitude'])
                 i = i + 1
 
             cursor.close()
