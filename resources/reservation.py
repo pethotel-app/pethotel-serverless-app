@@ -17,7 +17,7 @@ class ReservationResource(Resource) :
         try :
             connection = get_connection()
 
-            query = '''select r.*,h.title
+            query = '''select r.*,h.title,p.name
                     from reservations r
                     left join hotel h
                     on h.id = r.hotelId
@@ -54,7 +54,7 @@ class ReservationResource(Resource) :
             connection.close()
             return{"result":"fail","error":str(e)}, 500
         
-        return {"result" : 'seccess','items':result_list,'count':len(result_list)}, 200
+        return {"result" : 'success','items':result_list,'count':len(result_list)}, 200
 
     # 예약 정보 저장 ( 생성 )하는 API
     # 28번째 화면 기획서
