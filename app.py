@@ -6,6 +6,7 @@ from resources.benefit import CouponResource, CouponSearchResource, PointAddReso
 from resources.favorite import FavoriteListResource, FavoriteResource
 from resources.hotel import HotelInfoResource, HotelNearResource, HotelPriceResource, HotelSearchRankResource, HotelSearchResource
 from resources.pet import  PetListResource, PetResource
+from resources.recommend import HotelRecommendRealTimeResource
 from resources.reservation import ReservationResource
 from resources.review import MyReviewCheckResource, ReviewListResource
 from resources.user import CheckUserEmail, CheckUserPhone, UserChangePasswordResource, UserIdSearchResource, UserImageResource, UserInfoResource, UserLoginResource, UserLogoutResource, UserMyPageResource, UserPasswordSearchResource, UserRegisterResource, jwt_blacklist
@@ -61,6 +62,8 @@ api.add_resource(ReviewListResource, '/review/<int:hotelId>')
 api.add_resource(MyReviewCheckResource,'/review/my')
 
 api.add_resource(ReservationResource, '/reservation')
+
+api.add_resource(HotelRecommendRealTimeResource, '/hotel/recommend')
 
 if __name__ == '__main__' :
     app.run()
