@@ -279,7 +279,7 @@ class MyReviewCheckResource(Resource):
         try :
             connection = get_connection()
 
-            query = '''select r.*, h.title, u.name
+            query = '''select r.*, h.title, u.name, u.userImgUrl
                     from reviews r
                     left join hotel h on h.id = r.hotelId
                     left join `user` u on u.id = r.userId
