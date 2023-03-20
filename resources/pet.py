@@ -1,69 +1,77 @@
+from datetime import datetime
 from flask import request
+from flask_jwt_extended import create_access_token, get_jwt, get_jwt_identity, jwt_required
 from flask_restful import Resource
+from config import Config
 from mysql_connection import get_connection
 from mysql.connector import Error
-from flask_jwt_extended import jwt_required
-from flask_jwt_extended import get_jwt_identity
+from email_validator import validate_email, EmailNotValidError
+from utils import check_password, hash_password
+from datetime import datetime
+import boto3
 
 class PetListResource(Resource) : 
     # 반려동물 등록 API
     @jwt_required()
     def post(self) :
 
-
-
-
-        # 1. 클라이언트가 보내준 데이터가 있으면
-        #    그 데이터를 받아준다.
-        data = request.get_json()
-
-        # 1-1 헤더에JWT 토큰이 있으면 토큰 정보를 받아준다
         user_id = get_jwt_identity()
 
+        if 'photo' not in request.files :
+            return {'error' : '사진데이터 필수'}, 400
+        
+        file = request.files['photo']
+        name = request.form['name']
+        classification = request.form['classification']
+        species = request.form['species']
+        age = request.form['age']
+        weight = request.form['weight']
+        gender = request.form['gender']
 
+        if 'image' not in file.content_type :
+            return {'error' : '이미지 파일이 아닙니다.'}
+        
+        # 사진 S3에 저장
+        current_time = datetime.now()
+        new_file_name = current_time.isoformat().replace(':', '_') + '.jpg'
+        file.filename = new_file_name
 
-        # 2. 이 레시피정보를 DB에 저장해야한다.
+        client = boto3.client('s3', aws_access_key_id= Config.ACCESS_KEY, aws_secret_access_key= Config.SECRET_ACCESS)
+
+        try :
+            client.upload_fileobj(file, Config.S3_BUCKET, new_file_name, ExtraArgs= {'ACL' : 'public-read', 'ContentType' : file.content_type})
+        
+        except Exception as e :
+            return {"error" : str(e)}, 500
+
+        # 저장된 사진의 imgUrl
+        imgUrl = Config.S3_LOCATION + new_file_name
+
         
         try :
-            ### 1. DB에 연결
             connection = get_connection()
 
-            ### 2. 쿼리문 만들기
-            # todo : image처리
             query = '''insert into pet
-                    (userId,name,classification,species,age,weight,gender)
+                    (userId, name, classification, species, age, weight, gender, petImgUrl)
                     values
-                    (%s,%s,%s,%s,%s,%s,%s);'''
-            ### 3. 쿼리에 매칭되는 변수 처리 해준다. 튜플로!
-            record = ( user_id,data['name'],data['classification'],
-                      data['species'],data['age'],data['weight'],data['gender'] )
+                    (%s, %s, %s, %s, %s, %s, %s, %s);'''
+            
+            record = ( user_id, name, classification, species, age, weight, gender, imgUrl )
 
-            ### 4. 커서를 가져온다.
             cursor=connection.cursor()
-
-            ### 5. 쿼리문을 커서로 실행한다.
             cursor.execute(query, record)
-
-            ### 6. 커밋을 해줘야 DB에 완전히 반영된다.
             connection.commit()
 
-            ### 7. 자원 해제
             cursor.close()
             connection.close()
 
         except Error as e :
-
             print(e)
             cursor.close()
             connection.close()
 
             return{"result" : "fail", "error" : str(e)} , 500
 
-
-
-        # API를 끝낼때는
-        # 클라이언트에 보내줄 정보(json)와 http 상태 코드를
-        # 리턴한다.
         return {"result" : "success"} , 200
     
     # 반려동물 조회 API
@@ -108,10 +116,37 @@ class PetResource(Resource) :
     @jwt_required()
     def put(self, petId) :
 
-
-        data = request.get_json()
-
         user_id = get_jwt_identity()
+
+        if 'photo' not in request.files :
+            return {'error' : '사진데이터 필수'}, 400
+        
+        file = request.files['photo']
+        name = request.form['name']
+        classification = request.form['classification']
+        species = request.form['species']
+        age = request.form['age']
+        weight = request.form['weight']
+        gender = request.form['gender']
+
+        if 'image' not in file.content_type :
+            return {'error' : '이미지 파일이 아닙니다.'}
+        
+        # 사진 S3에 저장
+        current_time = datetime.now()
+        new_file_name = current_time.isoformat().replace(':', '_') + '.jpg'
+        file.filename = new_file_name
+
+        client = boto3.client('s3', aws_access_key_id= Config.ACCESS_KEY, aws_secret_access_key= Config.SECRET_ACCESS)
+
+        try :
+            client.upload_fileobj(file, Config.S3_BUCKET, new_file_name, ExtraArgs= {'ACL' : 'public-read', 'ContentType' : file.content_type})
+        
+        except Exception as e :
+            return {"error" : str(e)}, 500
+
+        # 저장된 사진의 imgUrl
+        imgUrl = Config.S3_LOCATION + new_file_name
 
         ### todo : 이미지 처리
         try :
@@ -122,11 +157,11 @@ class PetResource(Resource) :
                     species = %s,
                     age = %s,
                     weight = %s,
-                    gender = %s
+                    gender = %s,
+                    petImgUrl = %s
                     where id = %s and userId = %s;'''
             
-            record = (data['name'],data['classification'],data['species'],data['age'],
-                      data['weight'],data['gender'],petId,user_id)
+            record = (name, classification, species, age, weight, gender, imgUrl, petId, user_id)
             
             cursor = connection.cursor()
 

@@ -22,6 +22,7 @@ class PointSearchResource(Resource) :
                     join user u
                     on p.userId = u.id
                     where u.id = %s
+                    order by p.createdAt desc
                     limit '''+offset+''','''+limit+''';'''
             
             record = (userId,)
