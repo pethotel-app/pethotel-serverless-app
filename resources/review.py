@@ -272,14 +272,19 @@ class MyReviewCheckResource(Resource):
     @jwt_required()
     
     def get(self):
-
         userId = get_jwt_identity()
+        offset = request.args.get('offset')
+        limit = request.args.get('limit')
 
         try :
             connection = get_connection()
 
-            query = '''select * from reviews
-                    where userId = %s;'''
+            query = '''select r.*, h.title
+                    from reviews r
+                    left join hotel h on h.id = r.hotelId
+                    where userId = %s
+                    limit ''' + offset + ''' , ''' + limit + ''' ; '''
+            
             record = (userId,)
 
             ## 중요!!!! select 문은 
