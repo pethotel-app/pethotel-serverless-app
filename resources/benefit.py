@@ -209,6 +209,8 @@ class CouponSearchResource(Resource) :
     def get(self) :
 
         userId = get_jwt_identity()
+        offset = request.args.get('offset')
+        limit = request.args.get('limit')
 
 
         try : 
@@ -217,7 +219,8 @@ class CouponSearchResource(Resource) :
             query = '''select userId,couponId,title,description,discount,dateOfUseStart,dateOfUseEnd from coupons c
                     join checkCoupon k
                     on c.id = k.couponId
-                    where userId = %s;'''
+                    where userId = %s
+                    limit ''' + offset + ''' , ''' + limit + ''' ; '''
 
             record = (userId,)
 
