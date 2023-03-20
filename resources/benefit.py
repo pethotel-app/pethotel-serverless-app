@@ -10,15 +10,19 @@ class PointSearchResource(Resource) :
     def get(self) :
 
         userId = get_jwt_identity()
+        offset = request.args.get('offset')
+        limit = request.args.get('limit')
 
         try :
 
             connection = get_connection()
 
-            query = '''select p.content, p.addPoint, p.totalPoint,p.createdAt from points p
+            query = '''select p.content, p.addPoint, p.totalPoint,p.createdAt,IF(p.addPoint > 0, 1, 0) AS isEarn
+                    from points p
                     join user u
                     on p.userId = u.id
-                    where u.id = %s;'''
+                    where u.id = %s
+                    limit '''+offset+''','''+limit+''';'''
             
             record = (userId,)
 
@@ -50,7 +54,7 @@ class PointSearchResource(Resource) :
 
             return {'error' : '잘못된 유저 아이디입니다.'}, 400
 
-        return{'result' : 'success', 'items' : resultList}
+        return{'result' : 'success', 'items' : resultList,'count' : len(resultList)}
 
 # 유저 포인트 적립
 class PointAddResource(Resource) : 
