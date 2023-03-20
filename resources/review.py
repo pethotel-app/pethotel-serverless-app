@@ -279,9 +279,10 @@ class MyReviewCheckResource(Resource):
         try :
             connection = get_connection()
 
-            query = '''select r.*, h.title
+            query = '''select r.*, h.title, u.name
                     from reviews r
                     left join hotel h on h.id = r.hotelId
+                    left join `user` u on u.id = r.userId
                     where userId = %s
                     limit ''' + offset + ''' , ''' + limit + ''' ; '''
             
