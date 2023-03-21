@@ -1,4 +1,4 @@
-import resource
+
 from flask import request
 from flask_restful import Resource
 from mysql_connection import get_connection
@@ -139,7 +139,7 @@ class ReservationResource(Resource) :
         
         return {"result" : "success"}, 200
     
-class CancelReservationResource(resource) :
+class CancelReservationResource(Resource) :
     
     @jwt_required()
     def delete(self,hotelId,petId) :

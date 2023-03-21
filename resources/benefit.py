@@ -4,6 +4,7 @@ from flask_restful import Resource
 from mysql_connection import get_connection
 from mysql.connector import Error
 
+# 테스트 주석
 # 유저 포인트 조회
 class PointSearchResource(Resource) :
     @jwt_required()
