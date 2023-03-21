@@ -118,7 +118,6 @@ class PetResource(Resource) :
 
         user_id = get_jwt_identity()
         
-        file = request.files['photo']
         name = request.form['name']
         classification = request.form['classification']
         species = request.form['species']
@@ -127,30 +126,30 @@ class PetResource(Resource) :
         gender = request.form['gender']
         petImgUrl = request.form['petImgUrl']
 
-        if 'photo' in request.files :
+        if 'photo' in request.files:
             file = request.files['photo']
-            # 파일이 있는 경우 처리할 코드 작성
-        
-            # 사진 S3에 저장
-            current_time = datetime.now()
-            new_file_name = current_time.isoformat().replace(':', '_') + '.jpg'
-            file.filename = new_file_name
 
-            client = boto3.client('s3', aws_access_key_id= Config.ACCESS_KEY, aws_secret_access_key= Config.SECRET_ACCESS)
+            if file :
+                # 파일이 있는 경우 처리할 코드 작성
+                current_time = datetime.now()
+                new_file_name = current_time.isoformat().replace(':', '_') + '.jpg'
+                file.filename = new_file_name
 
-            try :
-                content_type = file.content_type if file.content_type else 'image/jpeg'
-                client.upload_fileobj(file, Config.S3_BUCKET, new_file_name, ExtraArgs= {'ACL' : 'public-read', 'ContentType' : content_type})
-            
-            except Exception as e :
-                return {"error" : str(e)}, 500
+                client = boto3.client('s3', aws_access_key_id= Config.ACCESS_KEY, aws_secret_access_key= Config.SECRET_ACCESS)
 
-            # 저장된 사진의 imgUrl
-            imgUrl = Config.S3_LOCATION + new_file_name
+                try :
+                    content_type = file.content_type if file.content_type else 'image/jpeg'
+                    client.upload_fileobj(file, Config.S3_BUCKET, new_file_name, ExtraArgs= {'ACL' : 'public-read', 'ContentType' : content_type})
+                
+                except Exception as e :
+                    return {"error" : str(e)}, 500
 
-        else :
-            # 파일이 없는 경우 처리할 코드 작성
-            imgUrl = petImgUrl
+                # 저장된 사진의 imgUrl
+                imgUrl = Config.S3_LOCATION + new_file_name
+
+            else :
+                # 파일이 없는 경우 처리할 코드 작성
+                imgUrl = petImgUrl
 
         try :
             connection = get_connection()
