@@ -103,3 +103,70 @@ class ReservationResource(Resource) :
         # 클라이언트에 보내줄 정보(json)와 http 상태 코드를
         # 리턴한다.
         return {"result" : "success"} , 200
+    
+    # 호텔 예약정보 삭제
+    @jwt_required()
+    def delete(self) :
+        
+        data = request.get_json()
+        userId = get_jwt_identity()
+
+        try :
+            connection = get_connection()
+
+            query = '''delete from reservations
+                    where userId=%s and hotelId = %s and petId =%s;'''
+            
+            record = (userId, data['hotelId'],data['petId'])
+
+            cursor = connection.cursor()
+
+            cursor.execute(query,record)
+
+            connection.commit()
+
+            cursor.close()
+            connection.close()
+
+        except Error as e:
+
+            print(e)
+            cursor.close()
+            connection.close()
+
+            return{"result" : "fail" , "error" : str(e)}, 500
+        
+        return {"result" : "success"}, 200
+    
+    # 취소 사유, 금액
+    @jwt_required()
+    def put(self) :
+        data = request.get_json()
+        userId = get_jwt_identity()
+
+        try :
+            connection = get_connection()
+
+            query = '''insert into cancelReason(userId, hotelId,reason,cancelPrice,resCreatedAt)
+                        values(%s,%s,%s,%s,%s);'''
+
+            record = (userId,data['hotelId'], data['reason'],data['cancelPrice'],data['resCreatedAt'])
+
+            cursor = connection.cursor()
+            cursor.execute(query,record)
+
+            connection.commit()
+
+            cursor.close()
+            connection.close()
+
+        except Error as e:
+
+            print(e)
+            cursor.close()
+            connection.close()
+
+            return{"result" : "fail" , "error" : str(e)}, 500
+        
+        return {"result" : "success"}, 200
+    
