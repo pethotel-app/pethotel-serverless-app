@@ -151,36 +151,36 @@ class PetResource(Resource) :
                 # 파일이 없는 경우 처리할 코드 작성
                 imgUrl = petImgUrl
 
-        try :
-            connection = get_connection()
-            query = '''update pet
-                    set name = %s,
-                    classification = %s,
-                    species = %s,
-                    age = %s,
-                    weight = %s,
-                    gender = %s,
-                    petImgUrl = %s
-                    where id = %s and userId = %s;'''
-            
-            record = (name, classification, species, age, weight, gender, imgUrl, petId, user_id)
-            
-            cursor = connection.cursor()
+            try :
+                connection = get_connection()
+                query = '''update pet
+                        set name = %s,
+                        classification = %s,
+                        species = %s,
+                        age = %s,
+                        weight = %s,
+                        gender = %s,
+                        petImgUrl = %s
+                        where id = %s and userId = %s;'''
+                
+                record = (name, classification, species, age, weight, gender, imgUrl, petId, user_id)
+                
+                cursor = connection.cursor()
 
-            cursor.execute(query, record)
+                cursor.execute(query, record)
 
-            connection.commit()
+                connection.commit()
 
-            cursor.close()
-            connection.close()
+                cursor.close()
+                connection.close()
 
-        except Error as e :
-            print(e)
-            cursor.close()
-            connection.close()
-            return {'result' : 'fail', 'error' : str(e)}, 500
+            except Error as e :
+                print(e)
+                cursor.close()
+                connection.close()
+                return {'result' : 'fail', 'error' : str(e)}, 500
 
-        return {'result' : 'success' }, 200
+            return {'result' : 'success' }, 200
 
     # 반려동물 삭제 API
     @jwt_required()
