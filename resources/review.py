@@ -171,7 +171,7 @@ class ReviewListResource(Resource) :
             connection.close()
             return{"result":"fail","error":str(e)}, 500
         
-        return {"result" : 'seccess','items':resultList,'count':len(resultList)}, 200
+        return {"result" : 'success','items':resultList,'count':len(resultList)}, 200
 
 
     # 리뷰 수정 API
@@ -318,4 +318,87 @@ class MyReviewCheckResource(Resource):
             return{"result":"fail","error":str(e)}, 500
         
         return {"result" : 'seccess','items':resultList,'count':len(resultList)}, 200
+    
+
+# 요약된 리뷰 가져오기.
+class ReviewSummaryResource(Resource):
+    @jwt_required()
+    
+    def get(self,hotelId):
+
+        try :
+            connection = get_connection()
+
+            query = '''SELECT content FROM reviews
+                    where hotelId=%s;'''
+            
+            record = (hotelId,)
+
+            ## 중요!!!! select 문은 
+            ## 커서를 가져올 때 dictionary = True로 해준다
+            cursor = connection.cursor(dictionary=True)
+
+            cursor.execute(query,record)
+
+            resultList=cursor.fetchall()
+
+            contents = [r['content'] for r in resultList]
+
+            all_content = ' '.join(contents)
+
+            print(all_content)
+            
+            cursor.close()
+            connection.close()
+        except Error as e :
+            print(e)
+            cursor.close()
+            connection.close()
+            return{"result":"fail","error":str(e)}, 500
+        
+        # 문서 요약 API ( 리뷰 요약 )
+
+
+        headers = {
+
+            "X-NCP-APIGW-API-KEY-ID": Config.client_id,
+            "X-NCP-APIGW-API-KEY": Config.client_secret,
+            "Content-Type": "application/json"
+        }
+        language = "ko"
+
+        
+
+        url= "https://naveropenapi.apigw.ntruss.com/text-summary/v1/summarize" 
+
+        summaryData = {"document":{
+            "content":all_content},
+            "option":{
+            "language":language
+            }
+        }
+
+        print(json.dumps(summaryData, indent=4, sort_keys=True))
+
+        response = requests.post(url, data=json.dumps(summaryData), headers=headers)
+
+        # rescode = response.status_code
+        # print(response)
+        # print(rescode)
+
+        json_data = json.loads(response.text)
+        
+        
+
+        if 'summary' in json_data:
+            summary = json_data['summary']
+            print(summary)
+        else:
+            print("Failed to get summary data")
+            summary = ""  # 초기화 코드 추가
+        
+        return {"result" : 'seccess','items':summary}, 200
+        
+
+
 
