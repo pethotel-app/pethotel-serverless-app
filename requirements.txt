@@ -9,7 +9,6 @@ psycopg2-binary
 passlib
 flask-jwt-extended
 email-validator
-
 requests
 certifi
 chardet
