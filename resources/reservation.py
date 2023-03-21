@@ -1,3 +1,4 @@
+import resource
 from flask import request
 from flask_restful import Resource
 from mysql_connection import get_connection
@@ -104,39 +105,7 @@ class ReservationResource(Resource) :
         # 리턴한다.
         return {"result" : "success"} , 200
     
-    # 호텔 예약정보 삭제
-    @jwt_required()
-    def delete(self) :
-        
-        data = request.get_json()
-        userId = get_jwt_identity()
-
-        try :
-            connection = get_connection()
-
-            query = '''delete from reservations
-                    where userId=%s and hotelId = %s and petId =%s;'''
-            
-            record = (userId, data['hotelId'],data['petId'])
-
-            cursor = connection.cursor()
-
-            cursor.execute(query,record)
-
-            connection.commit()
-
-            cursor.close()
-            connection.close()
-
-        except Error as e:
-
-            print(e)
-            cursor.close()
-            connection.close()
-
-            return{"result" : "fail" , "error" : str(e)}, 500
-        
-        return {"result" : "success"}, 200
+   
     
     # 취소 사유, 금액
     @jwt_required()
@@ -169,4 +138,38 @@ class ReservationResource(Resource) :
             return{"result" : "fail" , "error" : str(e)}, 500
         
         return {"result" : "success"}, 200
+    
+class CancelReservationResource(resource) :
+    
+    @jwt_required()
+    def delete(self,hotelId,petId) :
+        userId = get_jwt_identity()
+
+
+        try :
+            connection = get_connection()
+
+            query =  '''delete from reservations
+                    where userId=%s and hotelId = %s and petId =%s;'''
+            
+            record = (userId, hotelId,petId)
+
+            cursor = connection.cursor()
+            cursor.execute(query,record)
+
+            connection.commit()
+
+            cursor.close()
+            connection.close()
+
+        except Error as e:
+
+            print(e)
+            cursor.close()
+            connection.close()
+
+            return{"result" : "fail", "error" : str(e)}, 500
+        
+        return{"result" : "success"} , 200
+
     
