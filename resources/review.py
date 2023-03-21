@@ -397,7 +397,7 @@ class ReviewSummaryResource(Resource):
             print("Failed to get summary data")
             summary = ""  # 초기화 코드 추가
         
-        return {"result" : 'seccess','items':summary}, 200
+        return {"result" : 'success','summary':summary}, 200
         
 
 

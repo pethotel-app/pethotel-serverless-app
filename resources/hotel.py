@@ -4,51 +4,55 @@ from flask_restful import Resource
 from mysql_connection import get_connection
 from mysql.connector import Error
 
-class HotelSearchResource(Resource) :
+class HotelSearchResource(Resource):
     # 검색한 호텔 리스트 가져오기
     @jwt_required()
-    def get(self) :
+    def get(self):
         keyword = request.args.get('keyword')
         offset = request.args.get('offset')
         limit = request.args.get('limit')
         user_id = get_jwt_identity()
 
-        try :
+        try:
             connection = get_connection()
 
-            query = '''select h.id, h.title, h.imgUrl, ifnull(avg(r.rating),0) as avg, ifnull(count(r.hotelId),0) as cnt,
-                    if(f.userId is null, 0, 1) as 'favorite'
-                    from yh_project_db.hotel h
-                    left join yh_project_db.follows f on f.hotelId = h.id and f.userId= %s
-                    left join yh_project_db.reviews r on r.hotelId = h.id
-                    where h.title like '%''' + keyword + '''%' or h.addr like '%''' + keyword + '''%'
-                    group by h.id
-                    limit ''' + offset + ''' , ''' + limit + ''' ; '''
-            
-            record = (user_id, )
+            # 검색 결과 개수를 구하는 쿼리 추가
+            count_query = '''SELECT COUNT(*) as total_count
+                             FROM yh_project_db.hotel
+                             WHERE title LIKE %s OR addr LIKE %s'''
+            count_params = ('%' + keyword + '%', '%' + keyword + '%')
+            cursor = connection.cursor(dictionary=True)
+            cursor.execute(count_query, count_params)
+            total_count = cursor.fetchone()['total_count']
 
-            cursor = connection.cursor(dictionary= True)
-
-            cursor.execute(query, record)
-
+            # 검색 결과 목록을 가져오는 쿼리
+            query = '''SELECT h.id, h.title, h.imgUrl, IFNULL(AVG(r.rating),0) AS avg, IFNULL(COUNT(r.hotelId),0) AS cnt,
+                       IF(f.userId IS NULL, 0, 1) AS 'favorite'
+                       FROM yh_project_db.hotel h
+                       LEFT JOIN yh_project_db.follows f ON f.hotelId = h.id AND f.userId= %s
+                       LEFT JOIN yh_project_db.reviews r ON r.hotelId = h.id
+                       WHERE h.title LIKE %s OR h.addr LIKE %s
+                       GROUP BY h.id
+                       LIMIT %s, %s;'''
+            params = (user_id, '%' + keyword + '%', '%' + keyword + '%', int(offset), int(limit))
+            cursor.execute(query, params)
             result_list = cursor.fetchall()
 
-            i = 0
-            for row in result_list :
-                result_list[i]['avg'] = float(row['avg'])
-                i = i + 1
+            # 평균 평점을 실수형으로 변환
+            for row in result_list:
+                row['avg'] = float(row['avg'])
 
             cursor.close()
             connection.close()
 
-        except Error as e :
+        except Error as e:
             print(e)
             cursor.close()
             connection.close()
+            return {"error": str(e)}, 500
 
-            return {"error" : str(e)}, 500
+        return {"result": "success", "items": result_list, "count": total_count}, 200
 
-        return {"result" : "success", "items" : result_list, "count" : len(result_list)}, 200
     
      # 검색어 저장
     def put(self) :
@@ -145,6 +149,7 @@ class HotelSearchRankResource(Resource) :
             query = '''select keyword, ifnull(count(keyword),0) as cnt, createdAt
                     from (select * from yh_project_db.keyword where createdAt like '%''' + today + '''%' order by createdAt desc LIMIT 18446744073709551615) as `rank`
                     group by keyword
+                    order by cnt desc
                     limit ''' + offset + ''' , ''' + limit + ''' ; '''
 
             cursor = connection.cursor(dictionary= True)
