@@ -24,7 +24,8 @@ class ReservationResource(Resource) :
                     on h.id = r.hotelId
                     left join pet p
                     on p.id = r.petId
-                    where r.userId = %s;'''
+                    where r.userId = %s
+                    order by r.checkOutDate desc;'''
             record = (user_id,)
 
             ## 중요!!!! select 문은 
