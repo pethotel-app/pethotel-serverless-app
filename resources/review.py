@@ -12,7 +12,7 @@ from datetime import datetime
 import boto3
 import json
 
-# todo : 주석처리 (라이브러리 추가 후에)
+
 
 class ReviewListResource(Resource) :
 
@@ -33,7 +33,7 @@ class ReviewListResource(Resource) :
         content=request.form['content']
         rating = request.form['rating']
         # 레이팅 형변환
-        rating=int(rating)
+        rating=float(rating)
 
         if 'image' not in file.content_type :
             return {'error':'이미지 파일만 올려주세요'},400
@@ -74,25 +74,31 @@ class ReviewListResource(Resource) :
 
         url= "https://naveropenapi.apigw.ntruss.com/text-summary/v1/summarize" 
 
-        summmaryData = {"document":{
+        summaryData = {"document":{
             "content":content},
             "option":{
             "language":language
             }
         }
 
-        print(json.dumps(summmaryData, indent=4, sort_keys=True))
+        print(json.dumps(summaryData, indent=4, sort_keys=True))
 
-        response = requests.post(url, data=json.dumps(summmaryData), headers=headers)
+        response = requests.post(url, data=json.dumps(summaryData), headers=headers)
 
         # rescode = response.status_code
         # print(response)
         # print(rescode)
 
         json_data = json.loads(response.text)
-        summary = json_data['summary']
-        print(summary)
+        
+        
 
+        if 'summary' in json_data:
+            summary = json_data['summary']
+            print(summary)
+        else:
+            print("Failed to get summary data")
+            summary = ""  # 초기화 코드 추가
 
         
 
