@@ -85,55 +85,51 @@ class HotelSearchResource(Resource):
         return {"result" : "success"}, 200
     
 # 호텔 상세정보
-class HotelInfoResource(Resource) :
+class HotelInfoResource(Resource):
     @jwt_required(optional=True)
-    def get(self, hotelId) :
-
-
-        try :
+    def get(self, hotelId):
+        try:
             connection = get_connection()
 
-            query = '''select h.id,title,addr,longtitude,latitude,tel,imgUrl,naverUrl,description, small,medium,large
-                    from hotel h
-                    left join price p
-                    on h.id = p.hotelId
-                    where h.id = %s;'''
+            query = '''
+                select h.id, title, addr, longtitude, latitude, tel, imgUrl, naverUrl, description, small, medium, large, 
+                ifnull(avg(rating), 0) as avg, ifnull(cnt, 0) as cnt, if(f.userId is not null, 1, 0) as favorite
+                from hotel h
+                left join price p on h.id = p.hotelId
+                left join (select hotelId, count(*) as cnt, avg(rating) as rating from reviews group by hotelId) as r on h.id = r.hotelId
+                left join follows f on h.id = f.hotelId and f.userId = %s
+                where h.id = %s;
+                            '''
 
-
-            record = (hotelId,)
+            userId = get_jwt_identity()
+            record = (userId, hotelId)
 
             cursor = connection.cursor(dictionary=True)
-
-            cursor.execute(query,record)
+            cursor.execute(query, record)
 
             resultList = cursor.fetchall()
-            
-            if resultList[0]['id'] is None :
-                return{'error' : '잘못된 호텔 아이디 입니다.'} , 400
+
+            if len(resultList) == 0 or resultList[0]['id'] is None:
+                return {'error': '잘못된 호텔 아이디입니다.'}, 400
 
             i = 0
-            for row in resultList :
+            for row in resultList:
+                resultList[i]['avg'] = float(row['avg'])
                 resultList[i]['longtitude'] = float(row['longtitude'])
                 resultList[i]['latitude'] = float(row['latitude'])
                 i = i + 1
 
-
             cursor.close()
             connection.close()
 
-
-
-        except Error as e :
+        except Error as e:
             print(e)
             cursor.close()
             connection.close()
+            return {'error': str(e)}, 500
 
-            return {'error' : str(e) } , 500
+        return {'result': 'success', 'hotel': resultList[0]}
 
-            
-
-
-        return {'result' : 'success' , 'hotel' : resultList[0]}
     
     
 class HotelSearchRankResource(Resource) :

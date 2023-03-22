@@ -290,7 +290,8 @@ class MyReviewCheckResource(Resource):
                     left join hotel h on h.id = r.hotelId
                     left join `user` u on u.id = r.userId
                     where userId = %s
-                    limit ''' + offset + ''' , ''' + limit + ''' ; '''
+                    limit ''' + offset + ''' , ''' + limit + ''' 
+                    order by createdAt desc; '''
             
             record = (userId,)
 
