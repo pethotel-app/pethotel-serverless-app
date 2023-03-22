@@ -1,131 +1,51 @@
-<!--
-title: 'Serverless Framework Python Flask API on AWS'
-description: 'This template demonstrates how to develop and deploy a simple Python Flask API running on AWS Lambda using the traditional Serverless Framework.'
-layout: Doc
-framework: v3
-platform: AWS
-language: Python
-priority: 2
-authorLink: 'https://github.com/serverless'
-authorName: 'Serverless, inc.'
-authorAvatar: 'https://avatars1.githubusercontent.com/u/13742415?s=200&v=4'
--->
-
-# Serverless Framework Python Flask API on AWS
-
-This template demonstrates how to develop and deploy a simple Python Flask API service running on AWS Lambda using the traditional Serverless Framework.
+<img width="100%" height="45%" src="https://user-images.githubusercontent.com/120348500/226832685-98102eae-cff6-418e-8e92-b5b52180b611.png">
 
 
-## Anatomy of the template
+# 쉬다가개 - 당신이 쉬고 있는 동안 반려동물도 편안하게 쉬어가는 곳👀
 
-This template configures a single function, `api`, which is responsible for handling all incoming requests thanks to configured `httpApi` events. To learn more about `httpApi` event configuration options, please refer to [httpApi event docs](https://www.serverless.com/framework/docs/providers/aws/events/http-api/). As the events are configured in a way to accept all incoming requests, `Flask` framework is responsible for routing and handling requests internally. The implementation takes advantage of `serverless-wsgi`, which allows you to wrap WSGI applications such as Flask apps. To learn more about `serverless-wsgi`, please refer to corresponding [GitHub repository](https://github.com/logandk/serverless-wsgi). Additionally, the template relies on `serverless-python-requirements` plugin for packaging dependencies from `requirements.txt` file. For more details about `serverless-python-requirements` configuration, please refer to corresponding [GitHub repository](https://github.com/UnitedIncome/serverless-python-requirements).
+<div align="center">
+  <h1>📌</h1>
+</div>
+<div align="center"> 
+  <img src="https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=Python&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Flask-000000?style=flat-square&logo=Flask&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Serverless-FD5750?style=flat-square&logo=Serverless&logoColor=white"/>
+  <br>
+  <img src="https://img.shields.io/badge/NumPy-013243?style=flat-square&logo=NumPy&logoColor=white"/>
+  <img src="https://img.shields.io/badge/pandas-150458?style=flat-square&logo=pandas&logoColor=white"/> 
+  <img src="https://img.shields.io/badge/Postman-FF6C37?style=flat-square&logo=Postman&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Amazon AWS-232F3E?style=flat-square&logo=Amazon AWS&logoColor=white"/>
+  <br>
+  <img src="https://img.shields.io/badge/Amazon RDS-527FFF?style=flat-square&logo=Amazon RDS&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Amazon S3-569A31?style=flat-square&logo=Amazon S3&logoColor=white"/>
+  <img src="https://img.shields.io/badge/AWS Lambda-FF9900?style=flat-square&logo=AWS Lambda&logoColor=white"/>
 
-## Usage
+<img src="https://img.shields.io/badge/Amazon API Gateway-FF4F8B?style=flat-square&logo=Amazon API Gateway&logoColor=white"/>   <img src="https://img.shields.io/badge/Amazon CloudWatch-FF4F8B?style=flat-square&logo=Amazon CloudWatch&logoColor=white"/>
 
-### Prerequisites
+</div>
 
-In order to package your dependencies locally with `serverless-python-requirements`, you need to have `Python3.8` installed locally. You can create and activate a dedicated virtual environment with the following command:
+## 📌 Project Explanation 
+* 산업 매출액 기준 2027년에는 6조를 예상할만큼 반려동물 관련 시장 규모 전망이 매우 좋고 반려동물 호텔 업체 수가 2023년 기준 5년전과 비교하면 약 3배 정도로 빠른속도로 늘어나고 있는데 반려동물 전용 숙박업소 예약 플랫폼 앱은 존재하지않기 때문에 기획하게 되었습니다.
 
-```bash
-python3.8 -m venv ./venv
-source ./venv/bin/activate
-```
+<br><br>
+## 📌 Server Architecture
+<h3>ERD</h3>
+<img width="100%" height="45%" src="https://user-images.githubusercontent.com/120348500/226833912-a76908f8-be04-48cc-86d3-fdab04ae4335.png">
 
-Alternatively, you can also use `dockerizePip` configuration from `serverless-python-requirements`. For details on that, please refer to corresponding [GitHub repository](https://github.com/UnitedIncome/serverless-python-requirements).
+<h3>Server Architecture</h3>
+<img width="100%" height="45%" src="https://user-images.githubusercontent.com/120348500/226835058-9547e776-3d0a-40e3-a6ad-f74ad540d123.png">
 
-### Deployment
+<h3>API specification</h3>
+<img width="100%" height="45%" src="https://user-images.githubusercontent.com/120348500/226835929-3c036d19-b57f-4c2d-b7bc-698bc86b531a.png">
 
-This example is made to work with the Serverless Framework dashboard, which includes advanced features such as CI/CD, monitoring, metrics, etc.
 
-In order to deploy with dashboard, you need to first login with:
 
-```
-serverless login
-```
 
-install dependencies with:
 
-```
-npm install
-```
 
-and
+## <p align="center"> 🌈 Member</p>
 
-```
-pip install -r requirements.txt
-```
-
-and then perform deployment with:
-
-```
-serverless deploy
-```
-
-After running deploy, you should see output similar to:
-
-```bash
-Deploying aws-python-flask-api-project to stage dev (us-east-1)
-
-✔ Service deployed to stack aws-python-flask-api-project-dev (182s)
-
-endpoint: ANY - https://xxxxxxxx.execute-api.us-east-1.amazonaws.com
-functions:
-  api: aws-python-flask-api-project-dev-api (1.5 MB)
-```
-
-_Note_: In current form, after deployment, your API is public and can be invoked by anyone. For production deployments, you might want to configure an authorizer. For details on how to do that, refer to [httpApi event docs](https://www.serverless.com/framework/docs/providers/aws/events/http-api/).
-
-### Invocation
-
-After successful deployment, you can call the created application via HTTP:
-
-```bash
-curl https://xxxxxxx.execute-api.us-east-1.amazonaws.com/dev/
-```
-
-Which should result in the following response:
-
-```
-{"message":"Hello from root!"}
-```
-
-Calling the `/hello` path with:
-
-```bash
-curl https://xxxxxxx.execute-api.us-east-1.amazonaws.com/dev/hello
-```
-
-Should result in the following response:
-
-```bash
-{"message":"Hello from path!"}
-```
-
-If you try to invoke a path or method that does not have a configured handler, e.g. with:
-
-```bash
-curl https://xxxxxxx.execute-api.us-east-1.amazonaws.com/dev/nonexistent
-```
-
-You should receive the following response:
-
-```bash
-{"error":"Not Found!"}
-```
-
-### Local development
-
-Thanks to capabilities of `serverless-wsgi`, it is also possible to run your application locally, however, in order to do that, you will need to first install `werkzeug` dependency, as well as all other dependencies listed in `requirements.txt`. It is recommended to use a dedicated virtual environment for that purpose. You can install all needed dependencies with the following commands:
-
-```bash
-pip install werkzeug
-pip install -r requirements.txt
-```
-
-At this point, you can run your application locally with the following command:
-
-```bash
-serverless wsgi serve
-```
-
-For additional local development capabilities of `serverless-wsgi` plugin, please refer to corresponding [GitHub repository](https://github.com/logandk/serverless-wsgi).
+### 
+|왕현성|백민우|윤지수|
+|:-:|:--:|:-:|
+|<img src="https://avatars.githubusercontent.com/u/83231344?v=4" alt="SsongSik" width="100" height="100">|<img src="https://avatars.githubusercontent.com/u/75851930?v=4" alt="d00hye" width="100" height="100">|<img src="https://avatars.githubusercontent.com/u/62696816?v=4" alt="DoyKim-20" width="100" height="100">|
