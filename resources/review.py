@@ -59,46 +59,46 @@ class ReviewListResource(Resource) :
         # 저장된 사진의 imgUrl 생성
         imgUrl = Config.S3_LOCATION+new_file_name
 
-        # 문서 요약 API ( 리뷰 요약 )
+        # # 문서 요약 API ( 리뷰 요약 )
 
 
-        headers = {
+        # headers = {
 
-            "X-NCP-APIGW-API-KEY-ID": Config.client_id,
-            "X-NCP-APIGW-API-KEY": Config.client_secret,
-            "Content-Type": "application/json"
-        }
-        language = "ko"
+        #     "X-NCP-APIGW-API-KEY-ID": Config.client_id,
+        #     "X-NCP-APIGW-API-KEY": Config.client_secret,
+        #     "Content-Type": "application/json"
+        # }
+        # language = "ko"
 
         
 
-        url= "https://naveropenapi.apigw.ntruss.com/text-summary/v1/summarize" 
+        # url= "https://naveropenapi.apigw.ntruss.com/text-summary/v1/summarize" 
 
-        summaryData = {"document":{
-            "content":content},
-            "option":{
-            "language":language
-            }
-        }
+        # summaryData = {"document":{
+        #     "content":content},
+        #     "option":{
+        #     "language":language
+        #     }
+        # }
 
-        print(json.dumps(summaryData, indent=4, sort_keys=True))
+        # print(json.dumps(summaryData, indent=4, sort_keys=True))
 
-        response = requests.post(url, data=json.dumps(summaryData), headers=headers)
+        # response = requests.post(url, data=json.dumps(summaryData), headers=headers)
 
-        # rescode = response.status_code
-        # print(response)
-        # print(rescode)
+        # # rescode = response.status_code
+        # # print(response)
+        # # print(rescode)
 
-        json_data = json.loads(response.text)
+        # json_data = json.loads(response.text)
         
         
 
-        if 'summary' in json_data:
-            summary = json_data['summary']
-            print(summary)
-        else:
-            print("Failed to get summary data")
-            summary = ""  # 초기화 코드 추가
+        # if 'summary' in json_data:
+        #     summary = json_data['summary']
+        #     print(summary)
+        # else:
+        #     print("Failed to get summary data")
+        #     summary = ""  # 초기화 코드 추가
 
         
 
@@ -109,9 +109,9 @@ class ReviewListResource(Resource) :
         try :
             connection = get_connection()
             query='''insert into reviews
-                    (hotelId,userId,content,rating,imgUrl,contentSummary)
-                    values(%s,%s,%s,%s,%s,%s);'''
-            record = (hotelId,user_id,content,rating,imgUrl,summary)
+                    (hotelId,userId,content,rating,imgUrl)
+                    values(%s,%s,%s,%s,%s);'''
+            record = (hotelId,user_id,content,rating,imgUrl)
             cursor = connection.cursor()
             cursor.execute(query,record)
             connection.commit()
