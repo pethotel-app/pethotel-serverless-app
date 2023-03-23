@@ -46,7 +46,7 @@
 ## <p align="center"> 🌈 Member</p>
 
 ### 
-|왕현성|백민우|윤지수|
+|왕현성|윤지수|백민우|
 |:-:|:--:|:-:|
-|<img src="https://avatars.githubusercontent.com/u/83231344?v=4" alt="SsongSik" width="100" height="100">|<img src="https://avatars.githubusercontent.com/u/75851930?v=4" alt="d00hye" width="100" height="100">|<img src="https://user-images.githubusercontent.com/120348555/227100187-c5c3b01a-42b1-4841-ac2f-5cab3f35f93a.jpg" alt="DoyKim-20" width="100" height="100">|
-
+|<img src="https://user-images.githubusercontent.com/120348500/227099410-49f69b01-7b82-45a3-ab85-1d477c7ae6d1.jpg" width="100" height="100">|<img src="https://avatars.githubusercontent.com/u/75851930?v=4" alt="d00hye" width="100" height="100">|<img src="https://avatars.githubusercontent.com/u/62696816?v=4" alt="DoyKim-20" width="100" height="100">|
+|[hyunsungKR](https://github.com/hyunsungKR)|[Yunwltn](https://github.com/Yunwltn)|[leobaek](https://github.com/leobaek)|
