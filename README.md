@@ -48,4 +48,5 @@
 ### 
 |왕현성|백민우|윤지수|
 |:-:|:--:|:-:|
-|<img src="https://avatars.githubusercontent.com/u/83231344?v=4" alt="SsongSik" width="100" height="100">|<img src="https://avatars.githubusercontent.com/u/75851930?v=4" alt="d00hye" width="100" height="100">|<img src="[https://user-images.githubusercontent.com/120348555/227099364-dd32962f-f889-4c1c-b182-44b4a50f57ba.jpg](https://user-images.githubusercontent.com/120348555/227099603-bd55f339-10f6-4626-a340-2e04da8e857c.JPG)" alt="DoyKim-20" width="100" height="100">|
+|<img src="https://avatars.githubusercontent.com/u/83231344?v=4" alt="SsongSik" width="100" height="100">|<img src="https://avatars.githubusercontent.com/u/75851930?v=4" alt="d00hye" width="100" height="100">|<img src="https://user-images.githubusercontent.com/120348555/227099922-afd8f535-c77a-4542-819c-726c68f72c56.jpg" alt="DoyKim-20" width="100" height="100">|
+
