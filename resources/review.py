@@ -142,7 +142,7 @@ class ReviewListResource(Resource) :
                     left join user u
                     on u.id = r.userId
                     where r.hotelId = %s
-                    order by updatedAt desc
+                    order by createdAt desc
                     limit ''' + offset + ''' , ''' + limit + ''' ; '''
             record = (hotelId,)
 
