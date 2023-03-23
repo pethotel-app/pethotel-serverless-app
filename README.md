@@ -48,5 +48,5 @@
 ### 
 |왕현성|윤지수|백민우|
 |:-:|:--:|:-:|
-|<img src="https://user-images.githubusercontent.com/120348500/227099410-49f69b01-7b82-45a3-ab85-1d477c7ae6d1.jpg" width="100" height="100">|<img src="https://avatars.githubusercontent.com/u/75851930?v=4" alt="d00hye" width="100" height="100">|<img src="https://avatars.githubusercontent.com/u/62696816?v=4" alt="DoyKim-20" width="100" height="100">|
+|<img src="https://user-images.githubusercontent.com/120348500/227099410-49f69b01-7b82-45a3-ab85-1d477c7ae6d1.jpg" width="100" height="100">|<img src="https://avatars.githubusercontent.com/u/75851930?v=4" alt="d00hye" width="100" height="100">|<img src="https://user-images.githubusercontent.com/120348555/227101223-bbfa4b86-906f-4a33-9399-da2ed5f13fbb.jpg" width="100" height="100">|
 |[hyunsungKR](https://github.com/hyunsungKR)|[Yunwltn](https://github.com/Yunwltn)|[leobaek](https://github.com/leobaek)|
