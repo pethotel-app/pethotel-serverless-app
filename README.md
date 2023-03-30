@@ -1,7 +1,7 @@
-<img width="100%" height="45%" src="https://user-images.githubusercontent.com/120348500/226832685-98102eae-cff6-418e-8e92-b5b52180b611.png">
+<img width="100%" height="45%" src="https://user-images.githubusercontent.com/120348555/228705384-594d0b67-9a3e-44d9-b501-6a2466fcb192.jpg">
 
-
-# 쉬다가개 - 당신이 쉬고 있는 동안 반려동물도 편안하게 쉬어가는 곳👀
+  
+## 당신이 쉬고 있는 동안 반려동물도 편안하게 쉬어가는 곳, 쉬다가개:heart_eyes_cat:
 
 <div align="center">
   <h1>📌</h1>
@@ -48,5 +48,5 @@
 ### 
 |왕현성|윤지수|백민우|
 |:-:|:--:|:-:|
-|<img src="https://user-images.githubusercontent.com/120348500/227099410-49f69b01-7b82-45a3-ab85-1d477c7ae6d1.jpg" width="100" height="100">|<img src="https://user-images.githubusercontent.com/120348555/227101223-bbfa4b86-906f-4a33-9399-da2ed5f13fbb.jpg" alt="d00hye" width="100" height="100">|<img src="https://avatars.githubusercontent.com/u/75851930?v=4" width="100" height="100">|
+|<img src="https://user-images.githubusercontent.com/120348500/227099410-49f69b01-7b82-45a3-ab85-1d477c7ae6d1.jpg" width="100" height="100">|<img src="https://user-images.githubusercontent.com/120348555/227101223-bbfa4b86-906f-4a33-9399-da2ed5f13fbb.jpg" alt="d00hye" width="100" height="100">|<img src="https://user-images.githubusercontent.com/120348555/228713684-a3d415b9-1a34-481b-866c-7b034a2c061a.jpg" alt="DoyKim-20" width="100" height="100">|
 |[hyunsungKR](https://github.com/hyunsungKR)|[Yunwltn](https://github.com/Yunwltn)|[leobaek](https://github.com/leobaek)|
