@@ -129,4 +129,5 @@ dmypy.json
 .pyre/
 node_modules
 
-
+# config
+config.py
