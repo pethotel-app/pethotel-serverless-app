@@ -261,7 +261,7 @@ class HotelNearResource(Resource) :
                 i = i + 1
 
             cursor.close()
-            connection.close()
+            connection.close() 
 
         except Error as e :
             print(e)
