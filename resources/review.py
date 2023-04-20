@@ -250,6 +250,8 @@ class ReviewListResource(Resource) :
 
         try :
             connection = get_connection()
+            # 트랜잭션 시작
+            connection.begin() 
             query = '''delete  from reviews
                     where userId = %s and hotelId = %s;'''
             record = (user_id,hotelId)
@@ -263,6 +265,9 @@ class ReviewListResource(Resource) :
             cursor.close()
             connection.close()
         except Error as e :
+
+            # 트랜잭션 롤백
+            connection.rollback()
             print(e)
             cursor.close()
             connection.close()

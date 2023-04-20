@@ -68,6 +68,7 @@ class ReservationResource(Resource) :
         try :
             ### 1. DB에 연결
             connection = get_connection()
+            connection.begin()
 
             ### 2. 쿼리문 만들기
             query = '''insert into reservations
@@ -92,6 +93,8 @@ class ReservationResource(Resource) :
             connection.close()
 
         except Error as e :
+
+            connection.rollback()
 
             print(e)
             cursor.close()
@@ -149,6 +152,7 @@ class CancelReservationResource(Resource) :
 
         try :
             connection = get_connection()
+            connection.begin()
 
             query =  '''delete from reservations
                     where userId=%s and hotelId = %s and petId =%s;'''
@@ -164,7 +168,7 @@ class CancelReservationResource(Resource) :
             connection.close()
 
         except Error as e:
-
+            connection.rollback()
             print(e)
             cursor.close()
             connection.close()
