@@ -46,14 +46,16 @@ class UserRegisterResource(Resource) :
             # 회원가입한 유저의 id값 가져오기
             user_id = cursor.lastrowid
 
-            cursor.close()
-            connection.close()
+
 
         except Error as e :
             print(e)
+
+            return {"error" : str(e)}, 500
+        
+        finally:
             cursor.close()
             connection.close()
-            return {"error" : str(e)}, 500
 
         access_token = create_access_token(user_id)
         return {"result" : "success", "access_token" : access_token}, 200
@@ -90,14 +92,15 @@ class UserLoginResource(Resource) :
                 result_list[i]['updatedAt'] = row['updatedAt'].isoformat()
                 i = i + 1
 
-            cursor.close()
-            connection.close()
+            
 
         except Error as e :
             print(e)
+            return {"error" : str(e)}, 500
+        
+        finally:
             cursor.close()
             connection.close()
-            return {"error" : str(e)}, 500
 
 
         check = check_password( data['password'], result_list[0]['password'] )
@@ -147,15 +150,14 @@ class UserIdSearchResource(Resource) :
             if len(result_list) == 0 :
                 return {"error" : "회원가입한 사람이 아닙니다"} , 400
 
-            cursor.close()
-            connection.close()
+            
 
         except Error as e :
             print(e)
+            return {"result" : "fail", "error" : str(e)}, 500
+        finally:
             cursor.close()
             connection.close()
-
-            return {"result" : "fail", "error" : str(e)}, 500
         
         email = result_list[0]["email"]
 
@@ -187,15 +189,14 @@ class UserPasswordSearchResource(Resource) :
             if len(result_list) == 0 :
                 return {"error" : "회원가입한 사람이 아닙니다"} , 400
 
-            cursor.close()
-            connection.close()
+            
 
         except Error as e :
             print(e)
+            return {"result" : "fail", "error" : str(e)}, 500
+        finally:
             cursor.close()
             connection.close()
-
-            return {"result" : "fail", "error" : str(e)}, 500
         
         email = result_list[0]["email"]
 
@@ -271,16 +272,14 @@ class UserChangePasswordResource(Resource) :
 
             connection.commit()
 
-            cursor.close()
-            connection.close()
 
         except Error as e :
             connection.rollback()
             print(e)
+            return {"result" : "fail", "error" : str(e)}, 500
+        finally:
             cursor.close()
             connection.close()
-            return {"result" : "fail", "error" : str(e)}, 500
-
         return {"result" : "success"}, 200
 
 
@@ -303,15 +302,14 @@ class UserChangePasswordResource(Resource) :
 
             connection.commit()
 
-            cursor.close()
-            connection.close()
+
 
         except Error as e :
             print(e)
+            return {"result" : "fail", "error" : str(e)}, 500
+        finally:
             cursor.close()
             connection.close()
-            return {"result" : "fail", "error" : str(e)}, 500
-
         return {"result" : "success"}, 200
 
 # 회원정보
@@ -344,15 +342,14 @@ class UserInfoResource(Resource) :
                 result_list[i]['createdAt'] = row['createdAt'].isoformat()
                 i = i + 1
 
-            cursor.close()
-            connection.close()
+            
 
         except Error as e :
             print(e)
+            return {"result" : "fail", "error" : str(e)}, 500
+        finally:
             cursor.close()
             connection.close()
-
-            return {"result" : "fail", "error" : str(e)}, 500
 
         return {"result" : "success", "user" : result_list}, 200
     
@@ -384,15 +381,16 @@ class UserInfoResource(Resource) :
 
             connection.commit()
 
-            cursor.close()
-            connection.close()
+            
 
         except Error as e :
             connection.rollback()
             print(e)
+            
+            return {"result" : "fail", "error" : str(e)}, 500
+        finally:
             cursor.close()
             connection.close()
-            return {"result" : "fail", "error" : str(e)}, 500
 
         return {"result" : "success"}, 200
     
@@ -420,15 +418,15 @@ class UserInfoResource(Resource) :
 
             connection.commit()
 
-            cursor.close()
-            connection.close()
+            
 
         except Error as e :
             connection.rollback()
             print(e)
+            return {"result" : "fail", "error" : str(e)}, 500
+        finally:
             cursor.close()
             connection.close()
-            return {"result" : "fail", "error" : str(e)}, 500
 
         return {"result" : "success"}, 200
 
@@ -483,15 +481,13 @@ class UserImageResource(Resource) :
 
             connection.commit()
 
-            cursor.close()
-            connection.close()
 
         except Error as e :
             print(e)
+            return {"error" : str(e)}, 500
+        finally:
             cursor.close()
             connection.close()
-
-            return {"error" : str(e)}, 500
 
         return {"result" : "success"}, 200
     
@@ -517,15 +513,15 @@ class UserImageResource(Resource) :
 
             connection.commit()
 
-            cursor.close()
-            connection.close()
+            
 
         except Error as e :
             connection.rollback()
             print(e)
+            return {"result" : "fail", "error" : str(e)}, 500
+        finally:
             cursor.close()
             connection.close()
-            return {"result" : "fail", "error" : str(e)}, 500
 
         return {"result" : "success"}, 200
     
@@ -554,15 +550,14 @@ class CheckUserEmail(Resource) :
             if len(result_list) == 0 :
                 return {"result" : "success", "check" : "true"}, 200
 
-            cursor.close()
-            connection.close()
+            
 
         except Error as e :
             print(e)
+            return {"result" : "fail", "error" : str(e)}, 500
+        finally:
             cursor.close()
             connection.close()
-
-            return {"result" : "fail", "error" : str(e)}, 500
 
         return {"result" : "success", "check" : "false"}, 200
 
@@ -591,15 +586,14 @@ class CheckUserPhone(Resource) :
             if len(result_list) == 0 :
                 return {"result" : "success", "check" : "true"}, 200
 
-            cursor.close()
-            connection.close()
+            
 
         except Error as e :
             print(e)
+            return {"result" : "fail", "error" : str(e)}, 500
+        finally:
             cursor.close()
             connection.close()
-
-            return {"result" : "fail", "error" : str(e)}, 500
 
         return {"result" : "success", "check" : "false"}, 200
     
@@ -640,15 +634,14 @@ class UserMyPageResource(Resource) :
 
             print(result_list)
 
-            cursor.close()
-            connection.close()
+            
 
         except Error as e :
             print(e)
+            return {"result" : "fail", "error" : str(e)}, 500
+        finally:
             cursor.close()
             connection.close()
-
-            return {"result" : "fail", "error" : str(e)}, 500
 
         return {"result" : "success", "items" : result_list}, 200
 
