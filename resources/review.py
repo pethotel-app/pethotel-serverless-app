@@ -115,15 +115,14 @@ class ReviewListResource(Resource) :
             cursor = connection.cursor()
             cursor.execute(query,record)
             connection.commit()
-            cursor.close()
-            connection.close()
+            
 
         except Error as e :
             print(e)
+            return{'error':str(e)},500
+        finally:
             cursor.close()
             connection.close()
-            return{'error':str(e)},500
-        
         return {'result':'success'},200
 
     # 특정 호텔에 대한 리뷰 가져오는 API
@@ -163,13 +162,14 @@ class ReviewListResource(Resource) :
 
             # print(result_list)
 
-            cursor.close()
-            connection.close()
+            
         except Error as e :
             print(e)
+            
+            return{"result":"fail","error":str(e)}, 500
+        finally:
             cursor.close()
             connection.close()
-            return{"result":"fail","error":str(e)}, 500
         
         return {"result" : 'success','items':resultList,'count':len(resultList)}, 200
 
@@ -231,14 +231,15 @@ class ReviewListResource(Resource) :
             cursor = connection.cursor()
             cursor.execute(query,record)
             connection.commit()
-            cursor.close()
-            connection.close()
+            
 
         except Error as e :
             print(e)
+            
+            return{'error':str(e)},500
+        finally:
             cursor.close()
             connection.close()
-            return{'error':str(e)},500
         
         return {'result':'success'},200
 
@@ -262,16 +263,17 @@ class ReviewListResource(Resource) :
 
             connection.commit()
 
-            cursor.close()
-            connection.close()
+            
         except Error as e :
 
             # 트랜잭션 롤백
             connection.rollback()
             print(e)
+            
+            return{'result':'fail','error':str(e)}, 500
+        finally:
             cursor.close()
             connection.close()
-            return{'result':'fail','error':str(e)}, 500
 
         return {'result':'success'},200
     
@@ -316,13 +318,14 @@ class MyReviewCheckResource(Resource):
                 i = i+1
             # print(result_list)
 
-            cursor.close()
-            connection.close()
+            
         except Error as e :
             print(e)
+            
+            return{"result":"fail","error":str(e)}, 500
+        finally:
             cursor.close()
             connection.close()
-            return{"result":"fail","error":str(e)}, 500
         
         return {"result" : 'seccess','items':resultList,'count':len(resultList)}, 200
     
@@ -355,13 +358,14 @@ class ReviewSummaryResource(Resource):
 
             print(all_content)
             
-            cursor.close()
-            connection.close()
+            
         except Error as e :
             print(e)
+            
+            return{"result":"fail","error":str(e)}, 500
+        finally:
             cursor.close()
             connection.close()
-            return{"result":"fail","error":str(e)}, 500
         
         # 문서 요약 API ( 리뷰 요약 )
 

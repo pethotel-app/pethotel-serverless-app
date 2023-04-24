@@ -48,15 +48,16 @@ class HotelRecommendRealTimeResource(Resource) :
 
             result_list = cursor.fetchall()
 
-            cursor.close()
-            connection.close()
+            
 
         except Error as e :
             print(e)
-            cursor.close()
-            connection.close()
+           
 
             return {"error" : str(e)}, 500
+        finally:
+            cursor.close()
+            connection.close()
 
         # 4. DB로부터 가져온 내 별점 정보를 데이터프레임으로 만든다
         myRating = pd.DataFrame(data= result_list)
@@ -117,14 +118,15 @@ class HotelRecommendRealTimeResource(Resource) :
                 result_list[i]['latitude'] = float(row['latitude'])
                 i = i + 1
 
-            cursor.close()
-            connection.close()
+            
 
         except Error as e :
             print(e)
+            
+            return{"result":"fail","error":str(e)}, 500
+        finally:
             cursor.close()
             connection.close()
-            return{"result":"fail","error":str(e)}, 500
         
         return {"result" : 'success','items':result_list,'count':len(result_list)}, 200
 

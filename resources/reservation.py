@@ -48,13 +48,14 @@ class ReservationResource(Resource) :
                 result_list[i]['updatedAt']=row['updatedAt'].isoformat()
                 i = i+1
 
-            cursor.close()
-            connection.close()
+            
         except Error as e :
             print(e)
+            
+            return{"result":"fail","error":str(e)}, 500
+        finally:
             cursor.close()
             connection.close()
-            return{"result":"fail","error":str(e)}, 500
         
         return {"result" : 'success','items':result_list,'count':len(result_list)}, 200
 
@@ -89,18 +90,19 @@ class ReservationResource(Resource) :
             connection.commit()
 
             ### 7. 자원 해제
-            cursor.close()
-            connection.close()
+            
 
         except Error as e :
 
             connection.rollback()
 
             print(e)
-            cursor.close()
-            connection.close()
+            
 
             return{"result" : "fail", "error" : str(e)} , 500
+        finally:
+            cursor.close()
+            connection.close()
 
 
 
@@ -130,16 +132,17 @@ class ReservationResource(Resource) :
 
             connection.commit()
 
-            cursor.close()
-            connection.close()
+            
 
         except Error as e:
 
             print(e)
-            cursor.close()
-            connection.close()
+            
 
             return{"result" : "fail" , "error" : str(e)}, 500
+        finally:
+            cursor.close()
+            connection.close()
         
         return {"result" : "success"}, 200
     
@@ -164,16 +167,17 @@ class CancelReservationResource(Resource) :
 
             connection.commit()
 
-            cursor.close()
-            connection.close()
+            
 
         except Error as e:
             connection.rollback()
             print(e)
-            cursor.close()
-            connection.close()
+            
 
             return{"result" : "fail", "error" : str(e)}, 500
+        finally:
+            cursor.close()
+            connection.close()
         
         return{"result" : "success"} , 200
 
