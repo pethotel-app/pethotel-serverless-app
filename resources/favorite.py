@@ -27,15 +27,16 @@ class FavoriteResource(Resource) :
 
             connection.commit()
 
-            cursor.close()
-            connection.close()
+            
 
         except Error as e :
             print(e)
-            cursor.close()
-            connection.close()
+            
 
             return {"error" : str(e)}, 500
+        finally:
+            cursor.close()
+            connection.close()
 
         return {"result" : "success"}, 200
 
@@ -58,15 +59,16 @@ class FavoriteResource(Resource) :
 
             connection.commit()
 
-            cursor.close()
-            connection.close()
+            
 
         except Error as e :
             print(e)
-            cursor.close()
-            connection.close()
+            
 
             return {"error" : str(e)}, 500
+        finally:
+            cursor.close()
+            connection.close()
 
         return {"result" : "success"}, 200
 
@@ -104,14 +106,15 @@ class FavoriteListResource(Resource) :
                 result_list[i]['avg'] = float(row['avg'])
                 i = i + 1
 
-            cursor.close()
-            connection.close()
+            
 
         except Error as e :
             print(e)
-            cursor.close()
-            connection.close()
+            
 
             return {"error" : str(e)}, 500
+        finally:
+            cursor.close()
+            connection.close()
 
         return {"result" : "success", "items" : result_list, "count" : len(result_list)}, 200

@@ -42,15 +42,16 @@ class HotelSearchResource(Resource):
             for row in result_list:
                 row['avg'] = float(row['avg'])
 
-            cursor.close()
-            connection.close()
+            
 
         except Error as e:
             print(e)
-            cursor.close()
-            connection.close()
+            
             return {"error": str(e)}, 500
 
+        finally:
+            cursor.close()
+            connection.close()
         return {"result": "success", "items": result_list, "count": total_count}, 200
 
     
@@ -72,15 +73,16 @@ class HotelSearchResource(Resource):
 
             connection.commit()
 
-            cursor.close()
-            connection.close()
+            
 
         except Error as e :
             print(e)
-            cursor.close()
-            connection.close()
+            
 
             return {"result" : "fail", "error" : str(e)}, 500
+        finally:
+            cursor.close()
+            connection.close()
 
         return {"result" : "success"}, 200
     
@@ -119,14 +121,15 @@ class HotelInfoResource(Resource):
                 resultList[i]['latitude'] = float(row['latitude'])
                 i = i + 1
 
-            cursor.close()
-            connection.close()
+            
 
         except Error as e:
             print(e)
+            
+            return {'error': str(e)}, 500
+        finally:
             cursor.close()
             connection.close()
-            return {'error': str(e)}, 500
 
         return {'result': 'success', 'hotel': resultList[0]}
 
@@ -159,15 +162,16 @@ class HotelSearchRankResource(Resource) :
                 result_list[i]['createdAt'] = row['createdAt'].isoformat()
                 i = i + 1
 
-            cursor.close()
-            connection.close()
+            
 
         except Error as e :
             print(e)
-            cursor.close()
-            connection.close()
+            
 
             return {"error" : str(e)}, 500
+        finally:
+            cursor.close()
+            connection.close()
 
         return {"result" : "success", "items" : result_list, "count" : len(result_list)}, 200
     
@@ -197,16 +201,17 @@ class HotelPriceResource(Resource) :
             resultList = cursor.fetchall()
 
 
-            cursor.close()
-            connection.close()
+            
 
         except Error as e :
 
 
-            cursor.close()
-            connection.close()
+            
 
             return{'error' : str(e)}, 500
+        finally:
+            cursor.close()
+            connection.close()
 
         if len(resultList) == 0 :
 
@@ -260,14 +265,15 @@ class HotelNearResource(Resource) :
                 result_list[i]['latitude'] = float(row['latitude'])
                 i = i + 1
 
-            cursor.close()
-            connection.close() 
+            
 
         except Error as e :
             print(e)
+            
+            return{"result":"fail","error":str(e)}, 500
+        finally:
             cursor.close()
             connection.close()
-            return{"result":"fail","error":str(e)}, 500
         
         return {"result" : 'success','items':result_list,'count':len(result_list)}, 200
 

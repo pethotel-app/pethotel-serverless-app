@@ -62,15 +62,16 @@ class PetListResource(Resource) :
             cursor.execute(query, record)
             connection.commit()
 
-            cursor.close()
-            connection.close()
+            
 
         except Error as e :
             print(e)
-            cursor.close()
-            connection.close()
+            
 
             return{"result" : "fail", "error" : str(e)} , 500
+        finally:
+            cursor.close()
+            connection.close()
 
         return {"result" : "success"} , 200
     
@@ -101,13 +102,14 @@ class PetListResource(Resource) :
             
 
 
-            cursor.close()
-            connection.close()
+            
         except Error as e :
             print(e)
+            
+            return{"result":"fail","error":str(e)}, 500
+        finally:
             cursor.close()
             connection.close()
-            return{"result":"fail","error":str(e)}, 500
         
         return {"result" : 'success','items':result_list,'count':len(result_list)}, 200
 
@@ -171,14 +173,15 @@ class PetResource(Resource) :
 
                 connection.commit()
 
-                cursor.close()
-                connection.close()
+                
 
             except Error as e :
                 print(e)
+                
+                return {'result' : 'fail', 'error' : str(e)}, 500
+            finally:
                 cursor.close()
                 connection.close()
-                return {'result' : 'fail', 'error' : str(e)}, 500
 
             return {'result' : 'success' }, 200
 
@@ -200,13 +203,14 @@ class PetResource(Resource) :
 
             connection.commit()
 
-            cursor.close()
-            connection.close()
+            
         except Error as e :
             print(e)
-            cursor.close()
-            connection.close()
+            
             return{'result':'fail','error':str(e)}, 500
+        finally:
+                cursor.close()
+                connection.close()
 
         return {'result':'success'},200
     

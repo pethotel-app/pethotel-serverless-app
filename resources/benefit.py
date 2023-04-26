@@ -4,7 +4,6 @@ from flask_restful import Resource
 from mysql_connection import get_connection
 from mysql.connector import Error
 
-# 테스트 주석
 # 유저 포인트 조회
 class PointSearchResource(Resource) :
     @jwt_required()
@@ -41,16 +40,16 @@ class PointSearchResource(Resource) :
                 i = i + 1
 
 
-            cursor.close()
-            connection.close()
+            
 
         except Error as e :
 
 
-            cursor.close()
-            connection.close()
 
             return{'error' : str(e)}, 500
+        finally:
+            cursor.close()
+            connection.close()
 
         if len(resultList) == 0 :
 
@@ -84,16 +83,17 @@ class PointAddResource(Resource) :
 
             connection.commit()
 
-            cursor.close()
-            connection.close()
+            
 
         except Error as e :
             
             print(e)
-            cursor.close()
-            connection.close()
+        
             
             return{"result" : 'fail','error' : str(e)}, 500
+        finally:
+            cursor.close()
+            connection.close()
 
         return {"result" : "success"} , 200
     
@@ -129,16 +129,13 @@ class TotalPointResource(Resource) :
                 i = i + 1
 
 
-            cursor.close()
-            connection.close()
+            
 
         except Error as e :
-
-
+            return{'error' : str(e)}, 500
+        finally:
             cursor.close()
             connection.close()
-
-            return{'error' : str(e)}, 500
 
         if len(resultList) == 0 :
 
@@ -168,16 +165,17 @@ class CouponResource(Resource) :
 
             connection.commit()
 
-            cursor.close()
-            connection.close()
+            
 
         except Error as e :
             
             print(e)
-            cursor.close()
-            connection.close()
+            
             
             return {"error" : str(e)}, 500
+        finally:
+            cursor.close()
+            connection.close()
 
         return {"result" : "success"} , 200
     
@@ -198,14 +196,15 @@ class CouponResource(Resource) :
             cursor = connection.cursor()
             cursor.execute(query,record)
             connection.commit()
-            cursor.close()
-            connection.close()
-
+            
         except Error as e:
             print(e)
+            
+            return {'error':str(e)},500
+        
+        finally:
             cursor.close()
             connection.close()
-            return {'error':str(e)},500
 
         return {'result':'success'},200
     
@@ -243,16 +242,17 @@ class CouponSearchResource(Resource) :
                 i = i + 1
 
      
-            cursor.close()
-            connection.close()
+            
 
         except Error as e :
             
             print(e)
             
+            
+            return{'error' : str(e)}, 500
+        finally:
             cursor.close()
             connection.close()
-            return{'error' : str(e)}, 500
         
         
         return{'result' : 'success' , 'couponList' : resultList, 'count' : len(resultList)}      
