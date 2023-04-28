@@ -9,6 +9,8 @@ from email_validator import validate_email, EmailNotValidError
 from utils import check_password, hash_password
 from datetime import datetime
 import boto3
+from mysql.connector import DatabaseError, InterfaceError, ProgrammingError
+
 
 # 회원가입
 class UserRegisterResource(Resource) :
@@ -48,7 +50,7 @@ class UserRegisterResource(Resource) :
 
 
 
-        except Error as e :
+        except (DatabaseError, InterfaceError, ProgrammingError) as e:
             print(e)
 
             return {"error" : str(e)}, 500
@@ -94,7 +96,7 @@ class UserLoginResource(Resource) :
 
             
 
-        except Error as e :
+        except (DatabaseError, InterfaceError, ProgrammingError) as e:
             print(e)
             return {"error" : str(e)}, 500
         
@@ -152,7 +154,7 @@ class UserIdSearchResource(Resource) :
 
             
 
-        except Error as e :
+        except (DatabaseError, InterfaceError, ProgrammingError) as e:
             print(e)
             return {"result" : "fail", "error" : str(e)}, 500
         finally:
@@ -191,7 +193,7 @@ class UserPasswordSearchResource(Resource) :
 
             
 
-        except Error as e :
+        except (DatabaseError, InterfaceError, ProgrammingError) as e:
             print(e)
             return {"result" : "fail", "error" : str(e)}, 500
         finally:
@@ -273,7 +275,7 @@ class UserChangePasswordResource(Resource) :
             connection.commit()
 
 
-        except Error as e :
+        except (DatabaseError, InterfaceError, ProgrammingError) as e:
             connection.rollback()
             print(e)
             return {"result" : "fail", "error" : str(e)}, 500
@@ -304,7 +306,7 @@ class UserChangePasswordResource(Resource) :
 
 
 
-        except Error as e :
+        except (DatabaseError, InterfaceError, ProgrammingError) as e:
             print(e)
             return {"result" : "fail", "error" : str(e)}, 500
         finally:
@@ -344,7 +346,7 @@ class UserInfoResource(Resource) :
 
             
 
-        except Error as e :
+        except (DatabaseError, InterfaceError, ProgrammingError) as e:
             print(e)
             return {"result" : "fail", "error" : str(e)}, 500
         finally:
@@ -383,7 +385,7 @@ class UserInfoResource(Resource) :
 
             
 
-        except Error as e :
+        except (DatabaseError, InterfaceError, ProgrammingError) as e:
             connection.rollback()
             print(e)
             
@@ -420,7 +422,7 @@ class UserInfoResource(Resource) :
 
             
 
-        except Error as e :
+        except (DatabaseError, InterfaceError, ProgrammingError) as e:
             connection.rollback()
             print(e)
             return {"result" : "fail", "error" : str(e)}, 500
@@ -482,7 +484,7 @@ class UserImageResource(Resource) :
             connection.commit()
 
 
-        except Error as e :
+        except (DatabaseError, InterfaceError, ProgrammingError) as e:
             print(e)
             return {"error" : str(e)}, 500
         finally:
@@ -515,7 +517,7 @@ class UserImageResource(Resource) :
 
             
 
-        except Error as e :
+        except (DatabaseError, InterfaceError, ProgrammingError) as e:
             connection.rollback()
             print(e)
             return {"result" : "fail", "error" : str(e)}, 500
@@ -552,7 +554,7 @@ class CheckUserEmail(Resource) :
 
             
 
-        except Error as e :
+        except (DatabaseError, InterfaceError, ProgrammingError) as e:
             print(e)
             return {"result" : "fail", "error" : str(e)}, 500
         finally:
@@ -588,7 +590,7 @@ class CheckUserPhone(Resource) :
 
             
 
-        except Error as e :
+        except (DatabaseError, InterfaceError, ProgrammingError) as e:
             print(e)
             return {"result" : "fail", "error" : str(e)}, 500
         finally:
@@ -636,7 +638,7 @@ class UserMyPageResource(Resource) :
 
             
 
-        except Error as e :
+        except (DatabaseError, InterfaceError, ProgrammingError) as e:
             print(e)
             return {"result" : "fail", "error" : str(e)}, 500
         finally:
